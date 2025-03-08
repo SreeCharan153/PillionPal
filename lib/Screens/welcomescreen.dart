@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/SignUpScreen.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/SecondaryButton.dart';
 
@@ -67,7 +68,12 @@ class WelcomeScreen extends StatelessWidget {
                     PrimaryButton(
                       text: "Create an account",
                       onPressed: () {
-                        print("Create an account clicked!");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignupScreen(),
+                          ),
+                        );
                       },
                     ),
                     const SizedBox(height: 15),
