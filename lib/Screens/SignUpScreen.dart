@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pillionpal/Screens/login_screen.dart';
 import '../widgets/InputFields.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -128,7 +129,12 @@ class SignupScreen extends StatelessWidget {
               SizedBox(height: 20),
               Center(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
                   child: Text(
                     "Already have an account? Sign in",
                     style: TextStyle(
