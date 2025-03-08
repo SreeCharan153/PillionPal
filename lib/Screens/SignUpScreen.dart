@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/InputFields.dart';
@@ -7,6 +9,8 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class SignupScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Sign up with your email or phone number",
+                "Sign up with your email and phone number",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,

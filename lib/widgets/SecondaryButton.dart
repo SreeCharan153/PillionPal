@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class SecondaryButton extends StatelessWidget {
@@ -10,7 +12,7 @@ class SecondaryButton extends StatelessWidget {
   final double borderRadius;
 
   const SecondaryButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     this.width = 200,
@@ -18,7 +20,7 @@ class SecondaryButton extends StatelessWidget {
     this.borderColor = const Color(0xFF087B46), // Default Green Border
     this.textColor = const Color(0xFF087B46), // Default Green Text
     this.borderRadius = 10.0, // Default border radius
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

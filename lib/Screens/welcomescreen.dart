@@ -4,7 +4,7 @@ import '../widgets/PrimaryButton.dart';
 import '../widgets/SecondaryButton.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +82,7 @@ class WelcomeScreen extends StatelessWidget {
                     SecondaryButton(
                       text: "Log In",
                       onPressed: () {
+                        // ignore: avoid_print
                         print("Log In clicked!");
                       },
                     ),

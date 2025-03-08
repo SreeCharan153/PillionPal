@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -9,7 +11,7 @@ class PrimaryButton extends StatelessWidget {
   final TextStyle textStyle;
 
   const PrimaryButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     this.width = 200,
@@ -25,7 +27,7 @@ class PrimaryButton extends StatelessWidget {
       fontWeight: FontWeight.bold,
       color: Colors.white,
     ),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
