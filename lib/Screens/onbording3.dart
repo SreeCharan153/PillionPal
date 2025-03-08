@@ -1,24 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pillionpal/Screens/onbording3.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const OnboardingScreen2(),
-    );
-  }
-}
-
-class OnboardingScreen2 extends StatelessWidget {
-  const OnboardingScreen2({Key? key}) : super(key: key);
+class OnboardingScreen3 extends StatelessWidget {
+  const OnboardingScreen3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +27,7 @@ class OnboardingScreen2 extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Image.asset(
-                  'assets/images/welcome_2.png', // Ensure the asset exists
+                  'assets/images/welcome_3.png', // Update with correct image path
                   width: 300,
                   fit: BoxFit.contain,
                 ),
@@ -53,7 +36,7 @@ class OnboardingScreen2 extends StatelessWidget {
 
             // Title
             Text(
-              "At anytime",
+              "Book your ride",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -65,24 +48,18 @@ class OnboardingScreen2 extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: Text(
-                "Sell houses easily with the help of Listenoryx. "
-                "To make this line bigger, I am writing more.",
+                "Book a ride instantly with the help of PillionPal and get to your destination hassle-free.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
 
-            // Circular Progress Button (No Navigation)
+            // Circular Progress Button
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OnboardingScreen3(),
-                    ),
-                  );
+                  // Navigation logic here
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -91,25 +68,28 @@ class OnboardingScreen2 extends StatelessWidget {
                       height: 70,
                       width: 70,
                       child: CircularProgressIndicator(
-                        value: 0.75, // Adjust value if needed
+                        value: 1.0, // Full progress
                         strokeWidth: 5,
                         backgroundColor: Colors.green[100],
-                        valueColor: const AlwaysStoppedAnimation<Color>(
+                        valueColor: AlwaysStoppedAnimation<Color>(
                           Color(0xFF08B783),
                         ),
                       ),
                     ),
                     Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Color(0xFF08B783), // Button background
                         shape: BoxShape.circle,
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Icon(
-                          Icons.arrow_forward,
-                          size: 24,
-                          color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Text(
+                          "Go",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -118,7 +98,7 @@ class OnboardingScreen2 extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
           ],
         ),
       ),
