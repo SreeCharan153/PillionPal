@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pillionpal/Screens/onbording2.dart';
+import 'package:pillionpal/Screens/welcomescreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,10 @@ class OnboardingScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 50, right: 20),
               child: InkWell(
                 onTap: () {
-                  // Handle skip action
+                   Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WelcomeScreen()),
+              );
                 },
                 child: const Text(
                   "Skip",

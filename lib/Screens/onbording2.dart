@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pillionpal/Screens/onbording3.dart';
+import 'package:pillionpal/Screens/welcomescreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,10 +33,18 @@ class OnboardingScreen2 extends StatelessWidget {
             Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.only(top: 20, right: 20),
-                child: Text(
-                  "Skip",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                padding: const EdgeInsets.only(top: 50, right: 20),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "Skip",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
                 ),
               ),
             ),
@@ -91,7 +100,7 @@ class OnboardingScreen2 extends StatelessWidget {
                       height: 70,
                       width: 70,
                       child: CircularProgressIndicator(
-                        value: 0.75, // Adjust value if needed
+                        value: 0.65, // Adjust value if needed
                         strokeWidth: 5,
                         backgroundColor: Colors.green[100],
                         valueColor: const AlwaysStoppedAnimation<Color>(

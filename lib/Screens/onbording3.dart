@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/welcomescreen.dart';
 
 class OnboardingScreen3 extends StatelessWidget {
   const OnboardingScreen3({Key? key}) : super(key: key);
@@ -11,18 +12,6 @@ class OnboardingScreen3 extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Skip Button
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20, right: 20),
-                child: Text(
-                  "Skip",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ),
-            ),
-
             // Onboarding Image
             Expanded(
               child: Center(
@@ -59,7 +48,10 @@ class OnboardingScreen3 extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: GestureDetector(
                 onTap: () {
-                  // Navigation logic here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                  );
                 },
                 child: Stack(
                   alignment: Alignment.center,
