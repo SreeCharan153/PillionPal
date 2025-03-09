@@ -1,150 +1,205 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pillionpal/Screens/login_screen.dart';
 import '../widgets/InputFields.dart';
+import '../widgets/PrimaryButton.dart';
+import '../widgets/CustomButtons.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SignupPageState createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool agreeToTerms = false;
+  bool isPasswordVisible = false; // 🔥 New state for password visibility
 
-  SignupScreen({super.key});
+  void _signUp() {
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String phone = phoneController.text.trim();
+    String password = passwordController.text.trim();
+
+    // Validate Fields
+    if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("All fields are required"),
+          backgroundColor: Color.fromRGBO(0, 137, 85, 1),
+        ),
+      );
+      return;
+    }
+
+    // Validate Terms & Conditions
+    if (!agreeToTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("You must agree to the Terms & Conditions"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // TODO: Implement Sign Up Logic
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
+      body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Sign up with your email and phone number",
-                textAlign: TextAlign.center,
+              const SizedBox(height: 30),
+
+              // Title
+              const Text(
+                "Create Your Account",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey,
+                  color: Color.fromRGBO(0, 137, 85, 1),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 30),
+
+              // Full Name
               InputFields.buildTextField(
-                hint: "Name",
+                hint: "Full Name",
                 controller: nameController,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 16),
+
+              // Email
               InputFields.buildTextField(
                 hint: "Email",
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 16),
+
+              // Phone Number
               InputFields.buildPhoneNumberField(controller: phoneController),
-              SizedBox(height: 10),
-              InputFields.buildDropdownField(
-                hint: "Gender",
-                items: ["Male", "Female", "Other"],
-                onChanged: (value) {},
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(0, 137, 85, 1),
-                  shape: RoundedRectangleBorder(
+              const SizedBox(height: 16),
+
+              // Password with View Button 🔥
+              TextField(
+                controller: passwordController,
+                obscureText: !isPasswordVisible,
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+
+              // Terms & Conditions Checkbox
               Row(
                 children: [
-                  Expanded(child: Divider()),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("or"),
+                  Checkbox(
+                    value: agreeToTerms,
+                    activeColor: const Color.fromRGBO(0, 137, 85, 1),
+                    onChanged: (value) {
+                      setState(() {
+                        agreeToTerms = value!;
+                      });
+                    },
                   ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              SizedBox(height: 20),
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(FontAwesomeIcons.google, size: 24),
-                      SizedBox(width: 10),
-                      Text(
-                        "Sign up with Gmail",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.apple, size: 24),
-                      SizedBox(width: 10),
-                      Text(
-                        "Sign up with Apple",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: Text(
-                    "Already have an account? Sign in",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: const Color.fromRGBO(0, 137, 85, 1),
-                      fontWeight: FontWeight.bold,
+                  const Expanded(
+                    child: Text(
+                      "I agree to the Terms & Conditions",
+                      style: TextStyle(fontSize: 14),
                     ),
                   ),
-                ),
+                ],
               ),
+              const SizedBox(height: 10),
+
+              // Sign Up Button
+              PrimaryButton(text: "Sign Up", onPressed: _signUp),
+              const SizedBox(height: 20),
+
+              // OR Divider
+              const Row(
+                children: [
+                  Expanded(child: Divider(thickness: 1)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text("OR"),
+                  ),
+                  Expanded(child: Divider(thickness: 1)),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // Google Sign-Up Button
+              CustomButtons.buildOutlinedButton(
+                text: "Sign up with Gmail",
+                icon: FontAwesomeIcons.google,
+                onPressed: () {
+                  // TODO: Implement Google Sign-Up
+                },
+              ),
+              const SizedBox(height: 10),
+
+              // Apple Sign-Up Button
+              CustomButtons.buildOutlinedButton(
+                text: "Sign up with Apple",
+                icon: Icons.apple,
+                onPressed: () {
+                  // TODO: Implement Apple Sign-Up
+                },
+              ),
+              const SizedBox(height: 20),
+
+              // Already have an account? Sign In
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Already have an account?"),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: const Text(
+                      "Sign In",
+                      style: TextStyle(color: Color.fromRGBO(0, 137, 85, 1)),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),

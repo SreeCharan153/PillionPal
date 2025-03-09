@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pillionpal/Screens/SignUpScreen.dart';
+import 'package:pillionpal/Screens/login_screen.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/SecondaryButton.dart';
 
@@ -70,9 +71,7 @@ class WelcomeScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => SignupScreen(),
-                          ),
+                          MaterialPageRoute(builder: (context) => SignupPage()),
                         );
                       },
                     ),
@@ -82,8 +81,10 @@ class WelcomeScreen extends StatelessWidget {
                     SecondaryButton(
                       text: "Log In",
                       onPressed: () {
-                        // ignore: avoid_print
-                        print("Log In clicked!");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
                       },
                     ),
                     const SizedBox(height: 30),

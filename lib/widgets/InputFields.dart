@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InputFields {
+  // 🔥 Common Input Field with Outline
   static Widget buildTextField({
     required String hint,
     TextEditingController? controller,
@@ -15,17 +16,26 @@ class InputFields {
       obscureText: isPassword,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        hintText: hint,
+        labelText: hint,
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.grey), // 🔥 Added Outline
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.grey), // Default border
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.green, width: 2), // Focused
         ),
       ),
     );
   }
 
+  // 🔥 Dropdown Field with Outline
   static Widget buildDropdownField({
     required String hint,
     required List<String> items,
@@ -33,11 +43,20 @@ class InputFields {
   }) {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
+        labelText: hint,
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.grey), // 🔥 Added Outline
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.grey), // Default border
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.green, width: 2), // Focused
         ),
       ),
       hint: Text(hint),
@@ -49,6 +68,7 @@ class InputFields {
     );
   }
 
+  // 🔥 Phone Number Field with Outline
   static Widget buildPhoneNumberField({
     required TextEditingController controller,
   }) {
@@ -57,7 +77,7 @@ class InputFields {
       keyboardType: TextInputType.phone,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
-        hintText: "Your mobile number",
+        labelText: "Your mobile number",
         filled: true,
         fillColor: Colors.white,
         prefixIcon: Padding(
@@ -66,7 +86,15 @@ class InputFields {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.grey), // 🔥 Added Outline
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.grey), // Default border
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.green, width: 2), // Focused
         ),
       ),
     );
