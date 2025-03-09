@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/bike_list_page.dart';
 import '../widgets/SecondaryButton.dart'; // Import SecondaryButton
 import '../widgets/PrimaryButton.dart'; // Import PrimaryButton
 
@@ -23,6 +24,7 @@ class RoleSelectionPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -54,6 +56,10 @@ class RoleSelectionPage extends StatelessWidget {
                 text: "Continue As Pillion",
                 onPressed: () {
                   // Handle Pillion Selection
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BikeListPage()),
+                  );
                 },
                 width: double.infinity,
                 borderColor: const Color(

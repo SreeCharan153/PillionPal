@@ -35,11 +35,9 @@ class OnboardingScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 50, right: 20),
               child: InkWell(
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen(),
-                    ),
+                    MaterialPageRoute(builder: (context) => WelcomeScreen()),
                   );
                 },
                 child: const Text(
@@ -86,11 +84,9 @@ class OnboardingScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const OnboardingScreen2(),
-                  ),
+                  MaterialPageRoute(builder: (context) => OnboardingScreen2()),
                 );
               },
               child: Stack(

@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  hexagon: ^0.2.0
   flutter:
     sdk: flutter
 
@@ -71,6 +72,10 @@ flutter:
     - assets/images/others/apple.png
     - assets/images/others/gmail.png
     - assets/images/selection.png
+    - assets/images/Biles/bike_1.png
+    - assets/images/Biles/bike_2.png
+    - assets/images/Biles/bike_3.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
