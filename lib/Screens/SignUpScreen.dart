@@ -11,7 +11,6 @@ class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SignupPageState createState() => _SignupPageState();
 }
 
@@ -19,18 +18,20 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  String? selectedGender; // 🔥 New gender selection variable
+
   bool agreeToTerms = false;
-  bool isPasswordVisible = false; // 🔥 New state for password visibility
 
   void _signUp() {
     String name = nameController.text.trim();
     String email = emailController.text.trim();
     String phone = phoneController.text.trim();
-    String password = passwordController.text.trim();
 
     // Validate Fields
-    if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
+    if (name.isEmpty ||
+        email.isEmpty ||
+        phone.isEmpty ||
+        selectedGender == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("All fields are required"),
@@ -50,8 +51,25 @@ class _SignupPageState extends State<SignupPage> {
       );
       return;
     }
+    if (phone.length != 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Phone number must be 10 digits"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
-    // TODO: Implement Sign Up Logic
+    // Navigate to OTP Verification Screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => OTPVerificationScreen(), // 🔥 Navigate to OTP Screen
+      ),
+    );
+
   }
 
   @override
@@ -96,29 +114,27 @@ class _SignupPageState extends State<SignupPage> {
               InputFields.buildPhoneNumberField(controller: phoneController),
               const SizedBox(height: 16),
 
-              // Password with View Button 🔥
-              TextField(
-                controller: passwordController,
-                obscureText: !isPasswordVisible,
+              // Gender Dropdown 🔥
+              DropdownButtonFormField<String>(
+                value: selectedGender,
                 decoration: InputDecoration(
-                  hintText: "Password",
+                  hintText: "Select Gender",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
-                    },
-                  ),
                 ),
+                items:
+                    ["Male", "Female", "Other"].map((gender) {
+                      return DropdownMenuItem(
+                        value: gender,
+                        child: Text(gender),
+                      );
+                    }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedGender = value;
+                  });
+                },
               ),
               const SizedBox(height: 20),
 
@@ -166,12 +182,7 @@ class _SignupPageState extends State<SignupPage> {
                 text: "Sign up with Gmail",
                 icon: FontAwesomeIcons.google,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OTPVerificationScreen(),
-                    ),
-                  );
+                  // TODO: Implement Google Sign-Up
                 },
               ),
               const SizedBox(height: 10),

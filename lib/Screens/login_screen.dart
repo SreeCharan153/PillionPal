@@ -11,7 +11,6 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -34,7 +33,28 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // TODO: Implement Sign-In Logic
+    if (email == "Admin@gmail.com" && password == "admin123") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const RoleSelectionPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Invalid email or password"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _sendPasswordReset() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Password Reset Link Sent to your Email"),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override
@@ -69,27 +89,20 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 16),
 
               // Password Input using InputFields.dart ✅
-              TextField(
+              InputFields.buildTextField(
+                hint: "Enter your password",
                 controller: passwordController,
-                obscureText: !isPasswordVisible,
-                decoration: InputDecoration(
-                  labelText: "Enter your password",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                isPassword: true,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
-                    },
-                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPasswordVisible = !isPasswordVisible;
+                    });
+                  },
                 ),
               ),
               const SizedBox(height: 10),
@@ -98,9 +111,7 @@ class _LoginPageState extends State<LoginPage> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {
-                    // TODO: Implement Forgot Password Logic
-                  },
+                  onPressed: _sendPasswordReset,
                   child: const Text(
                     "Forgot Password?",
                     style: TextStyle(color: Color.fromRGBO(0, 137, 85, 1)),
@@ -141,12 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                 text: "Sign in with Apple",
                 icon: Icons.apple,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RoleSelectionPage(),
-                    ),
-                  );
+                   // TODO: Implement Apple Sign-In
                 },
               ),
               const SizedBox(height: 20),

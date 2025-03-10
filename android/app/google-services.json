@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "209196809810",
+    "project_id": "pillionpal-25a60",
+    "storage_bucket": "pillionpal-25a60.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209196809810:android:9ed3eb8d4af62715c0a98b",
+        "android_client_info": {
+          "package_name": "com.example.my_flutter_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCABMb7JwE-AQprufUma2KdU-qMALKUfZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

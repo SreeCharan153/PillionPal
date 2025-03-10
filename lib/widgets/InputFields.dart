@@ -9,6 +9,7 @@ class InputFields {
     required String hint,
     TextEditingController? controller,
     bool isPassword = false,
+    Widget? suffixIcon,
     TextInputType keyboardType = TextInputType.text,
   }) {
     return TextField(
