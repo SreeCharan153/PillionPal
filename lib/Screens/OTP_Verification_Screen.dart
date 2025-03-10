@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
+import 'package:pillionpal/Screens/SetPasswordScreen.dart';
 import '../widgets/PrimaryButton.dart';
-import '../Screens/SetPasswordScreen.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
   const OTPVerificationScreen({super.key});
@@ -104,7 +104,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   ),
                   focusedPinTheme: PinTheme(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green),
+                      border: Border.all(color: const Color.fromRGBO(0, 137, 85, 1)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
@@ -125,12 +125,12 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                     TextButton(
                       onPressed: () => _showSnackBar(
                         "OTP has been resent!",
-                        Colors.green,
+                        const Color.fromRGBO(0, 137, 85, 1),
                       ),
                       child: const Text(
                         "Resend again",
                         style: TextStyle(
-                          color: Colors.green,
+                          color: Color.fromRGBO(0, 137, 85, 1),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
