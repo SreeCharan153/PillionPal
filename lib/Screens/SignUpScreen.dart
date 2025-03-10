@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pillionpal/Screens/OTP_Verification_Screen.dart';
 import 'package:pillionpal/Screens/login_screen.dart';
 import '../widgets/InputFields.dart';
 import '../widgets/PrimaryButton.dart';
@@ -165,7 +166,12 @@ class _SignupPageState extends State<SignupPage> {
                 text: "Sign up with Gmail",
                 icon: FontAwesomeIcons.google,
                 onPressed: () {
-                  // TODO: Implement Google Sign-Up
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OTPVerificationScreen(),
+                    ),
+                  );
                 },
               ),
               const SizedBox(height: 10),
