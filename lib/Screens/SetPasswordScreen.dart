@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/RoleSelectionPage.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/InputFields.dart'; // ✅ Import InputFields utility
 
@@ -28,6 +29,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           content: Text("Password set successfully!"),
           backgroundColor: Colors.green,
         ),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const RoleSelectionPage()),
       );
       // 🚀 Proceed with password submission logic (e.g., backend API call)
     }
