@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       home: const OnboardingScreen(),
     );
   }
-}
+} 
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
