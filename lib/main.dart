@@ -13,6 +13,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white, // Light mode fill color
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: Colors.black,
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.black, // Dark mode fill color
+        ),
+      ),
+      themeMode: ThemeMode.system,
       home: const OnboardingScreen(),
     );
   }
@@ -23,116 +40,132 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkMode ? Colors.white : Colors.grey[800];
+    final iconColor =
+        isDarkMode ? Colors.white : Colors.black; // Dynamic icon color
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Skip Button
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 50, right: 20),
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Skip Button
+              Align(
+                alignment: Alignment.topRight,
+                child: InkWell(
+                  onTap: () {
+                    _navigateToScreen(context, const WelcomeScreen());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "Skip",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: iconColor,
+                      ), // Dynamic color
                     ),
-                  );
-                },
-                child: const Text(
-                  "Skip",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
                 ),
               ),
-            ),
-          ),
 
-          // Onboarding Image
-          Expanded(
-            child: Center(
-              child: Image.asset(
-                'assets/images/welcome_1.png', // Ensure this image exists in pubspec.yaml
-                width: 300,
-                fit: BoxFit.contain,
+              // Onboarding Image
+              Expanded(
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/welcome_1.png',
+                    width: 300,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          // Title
-          Text(
-            "Anywhere you are",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-            ),
-          ),
-
-          // Subtitle
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: Text(
-              "Book motorcycle rides easily with PillionPal and reach your destination hassle-free.",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ),
-
-          // Circular Progress Button
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OnboardingScreen2(),
-                  ),
-                );
-              },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Circular Progress Indicator
-                  SizedBox(
-                    width: 70,
-                    height: 70,
-                    child: CircularProgressIndicator(
-                      value: 0.25, // Progress value (25%)
-                      strokeWidth: 6,
-                      backgroundColor: Colors.green[100],
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        Color.fromRGBO(8, 183, 130, 1),
-                      ),
-                    ),
-                  ),
-
-                  // Circular Button with Arrow Icon
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromRGBO(8, 183, 131, 1),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.arrow_forward,
-                        size: 24,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+              // Title
+              Text(
+                "Anywhere you are",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
-            ),
-          ),
 
-          const SizedBox(height: 20),
-        ],
+              // Subtitle
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  "Book motorcycle rides easily with PillionPal and reach your destination hassle-free.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                ),
+              ),
+
+              // Circular Progress Button
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: GestureDetector(
+                  onTap: () {
+                    _navigateToScreen(context, const OnboardingScreen2());
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Circular Progress Indicator
+                      SizedBox(
+                        width: 70,
+                        height: 70,
+                        child: CircularProgressIndicator(
+                          value: 0.25,
+                          strokeWidth: 6,
+                          backgroundColor:
+                              isDarkMode ? Colors.grey[800] : Colors.green[100],
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            Color.fromRGBO(8, 183, 130, 1),
+                          ),
+                        ),
+                      ),
+
+                      // Circular Button with Arrow Icon
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.fromRGBO(8, 183, 131, 1),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_forward,
+                            size: 24,
+                            color: Colors.white, // Arrow should always be white
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToScreen(BuildContext context, Widget screen) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => screen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
       ),
     );
   }

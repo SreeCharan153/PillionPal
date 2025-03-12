@@ -36,7 +36,7 @@ class BikeDetailsPage extends StatelessWidget {
         ),
         title: Text(bikeName, style: const TextStyle(color: Colors.black)),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(

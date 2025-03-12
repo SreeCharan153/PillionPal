@@ -24,6 +24,25 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
   void _validateAndSubmit() {
     if (_formKey.currentState!.validate()) {
+      if (!_isPasswordValid(_passwordController.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Password must be 6+ characters, contain 1 uppercase & 1 digit."),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Passwords do not match!"),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Password set successfully!"),
@@ -46,76 +65,59 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       appBar: AppBar(
         title: const Text("Set Password"),
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: const BackButton(color: Colors.black),
       ),
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 150), // 🔥 Increased spacing for better placement
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SingleChildScrollView(  // ✅ Ensures content scrolls if needed
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 100), // 🔥 Adjusted spacing for better placement
 
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // 🔥 Password Field using InputFields Utility
-                  InputFields.buildTextField(
-                    hint: "Enter New Password",
-                    controller: _passwordController,
-                    isPassword: true,
-                  ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Must be 6+ characters, 1 uppercase & 1 digit",
-                      style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // 🔥 Password Field using InputFields Utility
+                    InputFields.buildTextField(
+                      context: context,
+                      hint: "Enter New Password",
+                      controller: _passwordController,
+                      isPassword: true,
                     ),
-                  ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Must be 6+ characters, 1 uppercase & 1 digit",
+                        style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                      ),
+                    ),
 
-                  const SizedBox(height: 20), // 🔥 Slightly increased space
+                    const SizedBox(height: 20), // 🔥 Slightly increased space
 
-                  // 🔥 Confirm Password Field using InputFields Utility
-                  InputFields.buildTextField(
-                    hint: "Confirm Password",
-                    controller: _confirmPasswordController,
-                    isPassword: true,
-                  ),
+                    InputFields.buildTextField(
+                      context: context,
+                      hint: "Confirm Password",
+                      controller: _confirmPasswordController,
+                      isPassword: true,
+                    ),
 
-                  const SizedBox(height: 40), // 🔥 More space before button
+                    const SizedBox(height: 40), // 🔥 More space before button
 
-                  // 🔥 Submit Button
-                  PrimaryButton(
-                    text: "Set Password",
-                    onPressed: () {
-                      if (!_isPasswordValid(_passwordController.text)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Password must be 6+ characters, contain 1 uppercase & 1 digit."),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-                      if (_passwordController.text != _confirmPasswordController.text) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Passwords do not match!"),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-                      _validateAndSubmit();
-                    },
-                  ),
-                ],
+                    // 🔥 Submit Button
+                    PrimaryButton(
+                      text: "Set Password",
+                      onPressed: _validateAndSubmit,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

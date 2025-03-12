@@ -75,7 +75,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -99,6 +99,7 @@ class _SignupPageState extends State<SignupPage> {
               InputFields.buildTextField(
                 hint: "Full Name",
                 controller: nameController,
+                context: context
               ),
               const SizedBox(height: 16),
 
@@ -107,11 +108,12 @@ class _SignupPageState extends State<SignupPage> {
                 hint: "Email",
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
+                context: context
               ),
               const SizedBox(height: 16),
 
               // Phone Number
-              InputFields.buildPhoneNumberField(controller: phoneController),
+              InputFields.buildPhoneNumberField(controller: phoneController,context: context),
               const SizedBox(height: 16),
 
               // Gender Dropdown 🔥

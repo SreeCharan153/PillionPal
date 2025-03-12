@@ -14,6 +14,8 @@ class BikeDetailsScreen extends StatefulWidget {
 class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
   final TextEditingController bikeNameController = TextEditingController();
   final TextEditingController modelController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   File? _bikeImage;
 
   Future<void> _pickImage() async {
@@ -25,112 +27,131 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
     }
   }
 
+  void _submitDetails() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Bike details submitted successfully!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text("Bike Details", style: TextStyle(color: Colors.black)),
+        title: const Text("Bike Details", style: TextStyle(color: Colors.black)),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Enter your Bike Details",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            SizedBox(height: 20),
-
-            // Bike Name Input Field
-            InputFields.buildTextField(
-              hint: "Bike Name",
-              controller: bikeNameController,
-            ),
-            SizedBox(height: 16),
-
-            // Model Input Field
-            InputFields.buildTextField(
-              hint: "Model",
-              controller: modelController,
-            ),
-            SizedBox(height: 16),
-
-            // Upload Bike Image Button
-            Row(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Container(
-                    height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey),
+                const Text(
+                  "Enter your Bike Details",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                const SizedBox(height: 20),
+
+                // Bike Name Input Field
+                InputFields.buildTextField(
+                  context: context, // 🔥 Fixed: Added missing argument
+                  hint: "Bike Name",
+                  controller: bikeNameController,
+                ),
+                const SizedBox(height: 16),
+
+                // Model Input Field
+                InputFields.buildTextField(
+                  context: context, // 🔥 Fixed: Added missing argument
+                  hint: "Model",
+                  controller: modelController,
+                ),
+                const SizedBox(height: 16),
+
+                // Upload Bike Image Button
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 50,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            _bikeImage == null ? "Upload Bike Image" : "Image Selected",
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ),
                     ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _bikeImage == null ? "Upload Bike Image" : "Image Selected",
-                        style: TextStyle(color: Colors.grey),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: _pickImage,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(0, 137, 85, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text("Upload", style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Image Preview
+                if (_bikeImage != null)
+                  Center(
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(_bikeImage!, fit: BoxFit.cover),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(0, 137, 85, 1), // Green color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                const SizedBox(height: 16),
+
+                // Submit Button
+                Center(
+                  child: ElevatedButton(
+                    onPressed: _submitDetails,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(0, 137, 85, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                     ),
+                    child: const Text("Submit", style: TextStyle(color: Colors.white, fontSize: 16)),
                   ),
-                  child: Text("Upload", style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
-            SizedBox(height: 16),
-
-            // Image Preview
-            if (_bikeImage != null)
-              Center(
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: Image.file(_bikeImage!, fit: BoxFit.cover),
-                ),
-              ),
-            SizedBox(height: 16),
-
-            // Submit Button
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle submission logic
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(0, 137, 85, 1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                ),
-                child: Text("Submit", style: TextStyle(color: Colors.white, fontSize: 16)),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

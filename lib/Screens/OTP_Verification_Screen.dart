@@ -53,9 +53,9 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       appBar: AppBar(
         leading: const BackButton(color: Colors.black),
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           reverse: true,

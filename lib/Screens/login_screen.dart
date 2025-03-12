@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -85,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                 hint: "Enter your email",
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
+                context: context
               ),
               const SizedBox(height: 16),
 
@@ -92,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
               InputFields.buildTextField(
                 hint: "Enter your password",
                 controller: passwordController,
+                context: context,
                 isPassword: true,
                 suffixIcon: IconButton(
                   icon: Icon(
