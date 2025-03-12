@@ -7,7 +7,7 @@ class BikeCard extends StatelessWidget {
   final String imageUrl;
   final String transmission;
   final String seats;
-  final String fuelType;
+  final String fair;
   final String distance;
   final String timeAway;
   final VoidCallback onViewDetails;
@@ -19,7 +19,7 @@ class BikeCard extends StatelessWidget {
     required this.imageUrl,
     required this.transmission,
     required this.seats,
-    required this.fuelType,
+    required this.fair,
     required this.distance,
     required this.timeAway,
     required this.onViewDetails,
@@ -70,7 +70,7 @@ class BikeCard extends StatelessWidget {
 
           // Bike Details
           Text(
-            "$transmission  |  $seats seat  |  $fuelType",
+            "$transmission  |  $seats seat  |  $fair",
             style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
 
