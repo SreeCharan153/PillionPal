@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/BikeDetailsScreen.dart';
 import 'package:pillionpal/Screens/bike_list_page.dart';
 import '../widgets/SecondaryButton.dart'; // Import SecondaryButton
 import '../widgets/PrimaryButton.dart'; // Import PrimaryButton
@@ -49,6 +50,10 @@ class RoleSelectionPage extends StatelessWidget {
                 text: "Continue As Rider",
                 onPressed: () {
                   // Handle Rider Selection
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BikeDetailsScreen()),
+                  );
                 },
               ),
               const SizedBox(height: 15),
