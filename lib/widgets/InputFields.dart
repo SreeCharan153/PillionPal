@@ -1,5 +1,4 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,24 +7,24 @@ class InputFields {
   static Widget buildTextField({
     required BuildContext context,
     required String hint,
-    required TextEditingController controller, // Fixed nullability issue
+    required TextEditingController controller,
     bool isPassword = false,
     Widget? suffixIcon,
     Widget? prefixIcon,
     TextInputType keyboardType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       controller: controller,
       obscureText: isPassword,
       keyboardType: keyboardType,
       validator: validator,
       decoration: InputDecoration(
-        labelText: hint,
+        hintText: hint,
         filled: true,
-        fillColor:
-            Theme.of(context).inputDecorationTheme.fillColor ??
-            Colors.white, // Dynamic theme-based fill color
+        fillColor: theme.colorScheme.surface, // Dynamic color adaptation
         contentPadding: const EdgeInsets.symmetric(
           vertical: 15,
           horizontal: 12,
@@ -34,11 +33,11 @@ class InputFields {
         suffixIcon: suffixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -59,28 +58,25 @@ class InputFields {
     required ValueChanged<String?> onChanged,
     String? value,
   }) {
+    final theme = Theme.of(context);
+
     return DropdownButtonFormField<String>(
-      value:
-          items.contains(value)
-              ? value
-              : null, // Fixed issue with null value handling
+      value: items.contains(value) ? value : null,
       decoration: InputDecoration(
-        labelText: hint,
+        hintText: hint,
         filled: true,
-        fillColor:
-            Theme.of(context).inputDecorationTheme.fillColor ??
-            Colors.white, // Dynamic fill color
+        fillColor: theme.colorScheme.surface, // Theme-adaptive color
         contentPadding: const EdgeInsets.symmetric(
           vertical: 15,
           horizontal: 12,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -90,7 +86,7 @@ class InputFields {
           ),
         ),
       ),
-      hint: Text(hint, style: const TextStyle(color: Colors.grey)),
+      hint: Text(hint, style: TextStyle(color: theme.hintColor)),
       items:
           items.map((String item) {
             return DropdownMenuItem<String>(
@@ -107,16 +103,16 @@ class InputFields {
     required BuildContext context,
     required TextEditingController controller,
   }) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.phone,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
-        labelText: "Your mobile number",
+        hintText: "Your mobile number",
         filled: true,
-        fillColor:
-            Theme.of(context).inputDecorationTheme.fillColor ??
-            Colors.white, // Dynamic fill color
+        fillColor: theme.colorScheme.surface, // Dynamic adaptation
         contentPadding: const EdgeInsets.symmetric(
           vertical: 15,
           horizontal: 12,
@@ -136,11 +132,11 @@ class InputFields {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
