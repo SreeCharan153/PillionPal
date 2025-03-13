@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                 hint: "Enter your password",
                 controller: passwordController,
                 context: context,
-                isPassword: true,
+                isPassword: !isPasswordVisible,
                 suffixIcon: IconButton(
                   icon: Icon(
                     isPasswordVisible ? Icons.visibility : Icons.visibility_off,
