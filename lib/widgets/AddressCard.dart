@@ -16,14 +16,19 @@ class AddressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor, // Adapting to theme
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
+            color:
+                theme.brightness == Brightness.light
+                    ? Colors.black12
+                    : Colors.white12, // Adapt shadow color
             blurRadius: 4,
             spreadRadius: 1,
             offset: const Offset(0, 2),
@@ -33,7 +38,7 @@ class AddressCard extends StatelessWidget {
       child: Row(
         children: [
           // Location Icon
-          const Icon(Icons.location_on, color: Colors.grey),
+          Icon(Icons.location_on, color: theme.iconTheme.color ?? Colors.grey),
 
           const SizedBox(width: 10),
 
@@ -53,7 +58,7 @@ class AddressCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   address,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  style: theme.textTheme.bodyMedium, // Use theme text style
                 ),
               ],
             ),
@@ -61,7 +66,7 @@ class AddressCard extends StatelessWidget {
 
           // Remove Button
           IconButton(
-            icon: const Icon(Icons.remove_circle, color: Colors.red),
+            icon: Icon(Icons.remove_circle, color: Colors.red.shade700),
             onPressed: onRemove,
           ),
         ],

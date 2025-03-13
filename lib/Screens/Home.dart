@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
-  bool _isMenuOpen = false;
+  late Animation<double> _menuAnimation;
 
   @override
   void initState() {
@@ -24,17 +24,17 @@ class _HomeScreenState extends State<HomeScreen>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _menuAnimation = Tween<double>(begin: -250, end: 0).animate(
+      CurvedAnimation(parent: _menuController, curve: Curves.easeInOut),
+    );
   }
 
   void _toggleMenu() {
-    setState(() {
-      _isMenuOpen = !_isMenuOpen;
-      if (_isMenuOpen) {
-        _menuController.forward();
-      } else {
-        _menuController.reverse();
-      }
-    });
+    if (_menuController.isCompleted) {
+      _menuController.reverse();
+    } else {
+      _menuController.forward();
+    }
   }
 
   @override
@@ -45,106 +45,85 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Home Screen Content
-          _buildHomeContent(),
+          // Main Content (doesn't shift)
+          Positioned.fill(
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
 
-          // Slide-Out Overlapping Menu Drawer
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            left: _isMenuOpen ? 0 : -250, // Moves off-screen when closed
-            top: 0,
-            bottom: 0,
-            width: 250,
-            child: MenuDrawer(), // Custom drawer widget
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHomeContent() {
-    return GestureDetector(
-      onTap: _isMenuOpen ? _toggleMenu : null, // Close menu on tap
-      child: AbsorbPointer(
-        absorbing: _isMenuOpen, // Prevent clicks when menu is open
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                color: Colors.black, // Background color
-              ),
-            ),
-
-            // App Bar with Menu Button
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.menu, size: 30, color: Colors.white),
-                      onPressed: _toggleMenu,
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.notifications, size: 30, color: Colors.white),
-                          onPressed: () {},
-                        ),
-                        const SizedBox(width: 10),
-                        IconButton(
-                          icon: Icon(
-                            widget.isBikeMode ? Icons.motorcycle : Icons.directions_walk,
-                            size: 30,
-                            color: Colors.white,
+                // Top Bar
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.menu, size: 30),
+                        onPressed: _toggleMenu,
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.notifications, size: 30),
+                            onPressed: () {},
                           ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomeScreen(isBikeMode: !widget.isBikeMode),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: Icon(
+                              widget.isBikeMode
+                                  ? Icons.motorcycle
+                                  : Icons.directions_walk,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => HomeScreen(
+                                        isBikeMode: !widget.isBikeMode,
+                                      ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
 
-            // Search Box and Transport Button
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 100),
-                child: Container(
+                // Search & Transport
+                const Spacer(),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.9),
+                    color: theme.cardColor,
                     borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       TextField(
                         decoration: InputDecoration(
                           hintText: "Where would you go?",
-                          hintStyle: TextStyle(color: Colors.grey.shade600),
-                          prefixIcon: const Icon(Icons.search, color: Colors.white),
-                          filled: true,
-                          fillColor: Colors.black,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
                           ),
+                          prefixIcon: const Icon(Icons.search),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -152,17 +131,42 @@ class _HomeScreenState extends State<HomeScreen>
                     ],
                   ),
                 ),
-              ),
+                const Spacer(),
+              ],
             ),
+          ),
 
-            // Bottom Navigation Bar
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Navbar(selectedIndex: 0),
-            ),
-          ],
-        ),
+          // Slide-out Menu (Overlays)
+          AnimatedBuilder(
+            animation: _menuController,
+            builder: (context, child) {
+              return Stack(
+                children: [
+                  // Dimmed background when menu opens
+                  if (_menuController.isCompleted ||
+                      _menuController.isAnimating)
+                    GestureDetector(
+                      onTap: _toggleMenu,
+                      child: Container(
+                        color: Colors.black.withOpacity(0.5),
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                    ),
+                  // Menu Drawer
+                  Positioned(
+                    left: _menuAnimation.value,
+                    top: 0,
+                    bottom: 0,
+                    child: MenuDrawer(animationController: _menuController),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
+      bottomNavigationBar: Navbar(selectedIndex: 0,isBikeMode: widget.isBikeMode,),
     );
   }
 }

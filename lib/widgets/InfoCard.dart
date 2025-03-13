@@ -10,7 +10,7 @@ class InfoCard extends StatelessWidget {
   final double padding;
 
   const InfoCard({
-    Key? key,
+    super.key,
     required this.label,
     required this.value,
     this.borderColor = const Color.fromRGBO(0, 137, 85, 1),
@@ -18,7 +18,7 @@ class InfoCard extends StatelessWidget {
     this.textColor = Colors.black87,
     this.borderRadius = 12.0,
     this.padding = 12.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
