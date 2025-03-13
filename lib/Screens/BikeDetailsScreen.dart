@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pillionpal/Screens/Home.dart';
 import 'dart:io';
 
-import '../widgets/InputFields.dart'; // Import the utility class
+import '../widgets/InputFields.dart'; // Import InputFields utility
+import '../widgets/PrimaryButton.dart'; // Import PrimaryButton widget
 
 class BikeDetailsScreen extends StatefulWidget {
   const BikeDetailsScreen({super.key});
@@ -29,6 +31,10 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
 
   void _submitDetails() {
     if (_formKey.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen(isBikeMode: true)),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Bike details submitted successfully!"),
@@ -67,7 +73,7 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
 
                 // Bike Name Input Field
                 InputFields.buildTextField(
-                  context: context, // 🔥 Fixed: Added missing argument
+                  context: context,
                   hint: "Bike Name",
                   controller: bikeNameController,
                 ),
@@ -75,7 +81,7 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
 
                 // Model Input Field
                 InputFields.buildTextField(
-                  context: context, // 🔥 Fixed: Added missing argument
+                  context: context,
                   hint: "Model",
                   controller: modelController,
                 ),
@@ -103,15 +109,11 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    ElevatedButton(
+
+                    // Upload Button using PrimaryButton
+                    PrimaryButton(
+                      text: "Upload",
                       onPressed: _pickImage,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(0, 137, 85, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text("Upload", style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -135,18 +137,11 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
                   ),
                 const SizedBox(height: 16),
 
-                // Submit Button
+                // Submit Button using PrimaryButton
                 Center(
-                  child: ElevatedButton(
+                  child: PrimaryButton(
+                    text: "Submit",
                     onPressed: _submitDetails,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(0, 137, 85, 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    ),
-                    child: const Text("Submit", style: TextStyle(color: Colors.white, fontSize: 16)),
                   ),
                 ),
               ],

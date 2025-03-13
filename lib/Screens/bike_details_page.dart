@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pillionpal/widgets/PrimaryButton.dart';
 
 class BikeDetailsPage extends StatelessWidget {
   final String bikeName;
@@ -49,6 +50,8 @@ class BikeDetailsPage extends StatelessWidget {
                 child: Image.asset(imageUrl, height: 400),
               ),
               const SizedBox(height: 20),
+
+              // Specifications
               Text("Specifications", style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 10),
               Row(
@@ -61,6 +64,8 @@ class BikeDetailsPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
+
+              // Rider & Bike Details
               Text("Rider & Bike Details", style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 10),
               _infoRow("Name", riderName),
@@ -68,14 +73,14 @@ class BikeDetailsPage extends StatelessWidget {
               _infoRow("Bike No", bikeNo),
               _infoRow("Licence No", licenceNo),
               const SizedBox(height: 20),
+
+              // "Ride Now" Button using PrimaryButton
               Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(0, 137, 85, 1),
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  ),
-                  child: const Text("Ride Now", style: TextStyle(color: Colors.white, fontSize: 18)),
+                child: PrimaryButton(
+                  text: "Ride Now",
+                  onPressed: () {
+                    print("Ride Now Clicked");
+                  },
                 ),
               ),
             ],
@@ -85,6 +90,7 @@ class BikeDetailsPage extends StatelessWidget {
     );
   }
 
+  // Widget for displaying bike specifications
   Widget _specificationBox(String title, String value) {
     return Container(
       padding: const EdgeInsets.all(10),
@@ -101,6 +107,7 @@ class BikeDetailsPage extends StatelessWidget {
     );
   }
 
+  // Widget for displaying rider and bike details
   Widget _infoRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
