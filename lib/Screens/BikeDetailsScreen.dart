@@ -76,6 +76,7 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
                   context: context,
                   hint: "Bike Name",
                   controller: bikeNameController,
+                  validator: (value) => value!.isEmpty ? "Please enter bike name" : null,
                 ),
                 const SizedBox(height: 16),
 
@@ -84,51 +85,47 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
                   context: context,
                   hint: "Model",
                   controller: modelController,
+                  validator: (value) => value!.isEmpty ? "Please enter model name" : null,
                 ),
                 const SizedBox(height: 16),
 
-                // Upload Bike Image Button
+                // Upload Bike Image Section
                 Row(
                   children: [
                     Expanded(
                       child: Container(
-                        height: 50,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                          color: Theme.of(context).colorScheme.surface,
                         ),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            _bikeImage == null ? "Upload Bike Image" : "Image Selected",
-                            style: const TextStyle(color: Colors.grey),
-                          ),
+                        child: Text(
+                          _bikeImage == null ? "Upload Bike Image" : "Image Selected",
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                     ),
                     const SizedBox(width: 10),
 
-                    // Upload Button using PrimaryButton
-                    PrimaryButton(
-                      text: "Upload",
-                      onPressed: _pickImage,
+                    // Upload Button using PrimaryButton (wrapped in Expanded)
+                    SizedBox(
+                      width: 100, // Give a fixed width to avoid layout issues
+                      child: PrimaryButton(
+                        text: "Upload",
+                        onPressed: _pickImage,
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
 
-                // Image Preview
+                // Image Preview (Fixed Layout Issue)
                 if (_bikeImage != null)
                   Center(
-                    child: Container(
+                    child: SizedBox(
                       width: 150,
                       height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey),
-                      ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.file(_bikeImage!, fit: BoxFit.cover),
