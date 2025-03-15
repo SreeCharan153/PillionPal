@@ -43,13 +43,13 @@ class _ComplainScreenState extends State<ComplainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Complain", style: TextStyle(color: Colors.black)),
+        title: const Text("Complain"),
         centerTitle: true,
       ),
       body: Padding(

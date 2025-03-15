@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import '../Widgets/SettingsTile.dart'; // Ensure you have the reusable widget
+import '../Widgets/SettingsTile.dart';
+import "ChangePassword.dart"; // Ensure you have the reusable widget
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
+  void ChangePassword(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +17,10 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Settings"),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -23,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
           children: [
             SettingsTile(
               title: "Change Password",
-              onTap: () => print("Change Password Clicked"),
+              onTap: () => ChangePassword(context),
             ),
             const SizedBox(height: 10),
             SettingsTile(

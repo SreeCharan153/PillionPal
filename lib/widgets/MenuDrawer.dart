@@ -76,13 +76,19 @@ class MenuDrawer extends StatelessWidget {
 
                   // Menu Items
                   _menuItem(context, Icons.home, "Home", HomeScreen(isBikeMode: isBikeMode)),
+                  const Divider(),
                   //_menuItem(context, Icons.article, "History", const HistoryScreen()),
+                  //const Divider(),
                   _menuItem(context, Icons.error_outline, "Complain", const ComplainScreen()),
+                  const Divider(),
                   //_menuItem(context, Icons.people_outline, "Referral", const ReferralScreen()),
+                  //const Divider(),
                   _menuItem(context, Icons.info_outline, "About Us", const AboutUsScreen()),
+                  const Divider(),
                   _menuItem(context, Icons.settings_outlined, "Settings", const SettingsScreen()),
+                  const Divider(),
                   //_menuItem(context, Icons.help_outline, "Help & Support", const HelpScreen()),
-                  const Divider(), // Adds a separator before logout
+                  //const Divider(), // Adds a separator before logout
                   //_menuItem(context, Icons.logout, "Logout", const LoginScreen(), isLogout: true),
                 ],
               ),
