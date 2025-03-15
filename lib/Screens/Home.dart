@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/bike_list_page.dart';
 import '../widgets/PrimaryButton.dart';

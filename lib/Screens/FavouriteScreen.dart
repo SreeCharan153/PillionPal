@@ -8,10 +8,10 @@ class FavouriteScreen extends StatefulWidget {
   final List<String> favoritePlaces; // ✅ Add this parameter
 
   const FavouriteScreen({
-    Key? key,
+    super.key,
     required this.isBikeMode,
     required this.favoritePlaces, // ✅ Make it required
-  }) : super(key: key);
+  });
 
   @override
   _FavouriteScreenState createState() => _FavouriteScreenState();

@@ -6,7 +6,7 @@ import '../widgets/MenuDrawer.dart'; // ✅ Import MenuDrawer
 class OfferScreen extends StatefulWidget {
   final bool isBikeMode;
 
-  const OfferScreen({Key? key, required this.isBikeMode}) : super(key: key);
+  const OfferScreen({super.key, required this.isBikeMode});
 
   @override
   _OfferScreenState createState() => _OfferScreenState();

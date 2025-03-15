@@ -12,8 +12,7 @@ class MenuDrawer extends StatelessWidget {
   final AnimationController animationController;
   final bool isBikeMode;
 
-  const MenuDrawer({Key? key, required this.animationController, required this.isBikeMode})
-      : super(key: key);
+  const MenuDrawer({super.key, required this.animationController, required this.isBikeMode});
 
   @override
   Widget build(BuildContext context) {
