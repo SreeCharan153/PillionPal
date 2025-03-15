@@ -33,6 +33,22 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
   }
 
+  void _validateFields() {
+    if (nameController.text.trim().isEmpty ||
+        streetController.text.trim().isEmpty ||
+        selectedCity == null ||
+        selectedDistrict == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill in all fields before proceeding."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      Get.to(const RoleSelectionPage());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,9 +142,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                 Expanded(
                   child: PrimaryButton(
                     text: "Save",
-                    onPressed: () {
-                      Get.to(const RoleSelectionPage());
-                    },
+                    onPressed: _validateFields, // Calls validation before navigation
                   ),
                 ),
               ],
