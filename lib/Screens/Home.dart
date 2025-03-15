@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
+import '../widgets/CustomSearchBar.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isBikeMode;
@@ -16,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
   late Animation<double> _menuAnimation;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -37,9 +39,15 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  void _onSearchSubmitted(String query) {
+    // Handle the search logic (API call, navigation, etc.)
+    print("User searched for: $query");
+  }
+
   @override
   void dispose() {
     _menuController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -50,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: Stack(
         children: [
-          // Main Content (doesn't shift)
+          // Main Content
           Positioned.fill(
             child: Column(
               children: [
@@ -84,10 +92,9 @@ class _HomeScreenState extends State<HomeScreen>
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (context) => HomeScreen(
-                                        isBikeMode: !widget.isBikeMode,
-                                      ),
+                                  builder: (context) => HomeScreen(
+                                    isBikeMode: !widget.isBikeMode,
+                                  ),
                                 ),
                               );
                             },
@@ -98,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
 
-                // Search & Transport
+                // Search Bar & Transport Button
                 const Spacer(),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -117,14 +124,16 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   child: Column(
                     children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: "Where would you go?",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          prefixIcon: const Icon(Icons.search),
-                        ),
+                      CustomSearchBar(
+                        controller: _searchController,
+                        onChanged: (text) {
+                          print("User is typing: $text");
+                        },
+                        onSubmitted: _onSearchSubmitted,
+                        onFavoriteTap: () {
+                          print("Favorite Icon Tapped");
+                          // Navigate to the favorite places screen if needed
+                        },
                       ),
                       const SizedBox(height: 10),
                       PrimaryButton(text: "Transport", onPressed: () {}),
@@ -158,7 +167,10 @@ class _HomeScreenState extends State<HomeScreen>
                     left: _menuAnimation.value,
                     top: 0,
                     bottom: 0,
-                    child: MenuDrawer(animationController: _menuController),
+                    child: MenuDrawer(
+                      animationController: _menuController,
+                      isBikeMode: widget.isBikeMode,
+                    ),
                   ),
                 ],
               );
@@ -166,7 +178,10 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ],
       ),
-      bottomNavigationBar: Navbar(selectedIndex: 0,isBikeMode: widget.isBikeMode,),
+      bottomNavigationBar: Navbar(
+        selectedIndex: 0,
+        isBikeMode: widget.isBikeMode,
+      ),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../Screens/Home.dart';
 import '../Screens/FavouriteScreen.dart';
 //import 'wallet_screen.dart';
-//import 'offer_screen.dart';
+import '../Screens/Offer_Screen.dart';
 //import 'profile_screen.dart';
 
 class Navbar extends StatefulWidget {
@@ -21,38 +21,35 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   void _onItemTapped(int index) {
-    if (index == widget.selectedIndex) return; // Prevent unnecessary navigation
+  if (index == widget.selectedIndex) return; // Prevent unnecessary navigation
 
-    Widget nextScreen;
-    switch (index) {
-      case 0:
-        nextScreen = HomeScreen(
-          isBikeMode: widget.isBikeMode,
-        ); // Pass isBikeMode
-        break;
-      case 1:
-        nextScreen = FavouriteScreen(
-          isBikeMode: widget.isBikeMode,
-        ); // Preserve isBikeMode
-        break;
-      case 2:
-        // nextScreen = WalletScreen();
-        return;
-      case 3:
-        // nextScreen = OfferScreen();
-        return;
-      case 4:
-        // nextScreen = ProfileScreen();
-        return;
-      default:
-        return;
-    }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => nextScreen),
-    );
+  Widget nextScreen;
+  switch (index) {
+    case 0:
+      nextScreen = HomeScreen(isBikeMode: widget.isBikeMode);
+      break;
+    case 1:
+      nextScreen = FavouriteScreen(isBikeMode: widget.isBikeMode);
+      break;
+    case 2:
+      // Wallet Screen (currently not implemented)
+      return;
+    case 3:
+      nextScreen = OfferScreen(isBikeMode: widget.isBikeMode);
+      break;
+    case 4:
+      // Profile Screen (currently not implemented)
+      return;
+    default:
+      return;
   }
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => nextScreen),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {

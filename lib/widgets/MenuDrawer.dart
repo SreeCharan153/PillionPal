@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-//import '../Screens/HistoryScreen.dart';
-//import '../Screens/ComplainScreen.dart';
-//import '../Screens/ReferralScreen.dart';
-//import '../Screens/AboutUsScreen.dart';
-//import '../Screens/SettingsScreen.dart';
-//import '../Screens/HelpScreen.dart';
-//import '../Screens/LoginScreen.dart';
+import '../screens/Home.dart';
+//import '../screens/HistoryScreen.dart';
+//import '../screens/ComplainScreen.dart';
+//import '../screens/ReferralScreen.dart';
+//import '../screens/AboutUsScreen.dart';
+//import '../screens/SettingsScreen.dart';
+//import '../screens/HelpScreen.dart';
+//import '../screens/LoginScreen.dart';
 
 class MenuDrawer extends StatelessWidget {
   final AnimationController animationController;
+  final bool isBikeMode;
 
-  const MenuDrawer({Key? key, required this.animationController})
+  const MenuDrawer({Key? key, required this.animationController, required this.isBikeMode})
       : super(key: key);
 
   @override
@@ -38,7 +40,7 @@ class MenuDrawer extends StatelessWidget {
                 children: [
                   const SizedBox(height: 40),
 
-                  // Back Button
+                  // Close Menu Button
                   GestureDetector(
                     onTap: () => animationController.reverse(),
                     child: Row(
@@ -52,7 +54,7 @@ class MenuDrawer extends StatelessWidget {
 
                   const SizedBox(height: 30),
 
-                  // Profile Section
+                  // Profile Section (Dynamic Placeholder for Future Integration)
                   Center(
                     child: Column(
                       children: [
@@ -64,22 +66,24 @@ class MenuDrawer extends StatelessWidget {
                           backgroundImage: const AssetImage('assets/images/profile.png'),
                         ),
                         const SizedBox(height: 10),
-                        Text("Nate Samson", style: theme.textTheme.titleLarge),
-                        Text("nate@email.com", style: theme.textTheme.bodyMedium),
+                        Text("User Name", style: theme.textTheme.titleLarge), // Replace with dynamic name
+                        Text("user@email.com", style: theme.textTheme.bodyMedium), // Replace with dynamic email
                       ],
                     ),
                   ),
 
                   const SizedBox(height: 30),
 
-                  // Menu Items with Navigation
-                  //_menuItem(context, Icons.article, "History", HistoryScreen()),
-                  //_menuItem(context, Icons.error_outline, "Complain", ComplainScreen()),
-                  //_menuItem(context, Icons.people_outline, "Referral", ReferralScreen()),
-                  //_menuItem(context, Icons.info_outline, "About Us", AboutUsScreen()),
-                  //_menuItem(context, Icons.settings_outlined, "Settings", SettingsScreen()),
-                  //_menuItem(context, Icons.help_outline, "Help and Support", HelpScreen()),
-                  //_menuItem(context, Icons.logout, "Logout", LoginScreen(), isLogout: true),
+                  // Menu Items
+                  _menuItem(context, Icons.home, "Home", HomeScreen(isBikeMode: isBikeMode)),
+                  //_menuItem(context, Icons.article, "History", const HistoryScreen()),
+                  //_menuItem(context, Icons.error_outline, "Complain", const ComplainScreen()),
+                  //_menuItem(context, Icons.people_outline, "Referral", const ReferralScreen()),
+                  //_menuItem(context, Icons.info_outline, "About Us", const AboutUsScreen()),
+                  //_menuItem(context, Icons.settings_outlined, "Settings", const SettingsScreen()),
+                  //_menuItem(context, Icons.help_outline, "Help & Support", const HelpScreen()),
+                  const Divider(), // Adds a separator before logout
+                  //_menuItem(context, Icons.logout, "Logout", const LoginScreen(), isLogout: true),
                 ],
               ),
             ),
@@ -93,7 +97,7 @@ class MenuDrawer extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (isLogout) {
-          // Handle logout logic (e.g., clearing session, navigating to login)
+          // Handle logout logic (Add authentication clearing if needed)
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => screen),
@@ -102,7 +106,18 @@ class MenuDrawer extends StatelessWidget {
         } else {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => screen),
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => screen,
+              transitionsBuilder: (_, anim, __, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(-1, 0),
+                    end: Offset.zero,
+                  ).animate(anim),
+                  child: child,
+                );
+              },
+            ),
           );
         }
       },
