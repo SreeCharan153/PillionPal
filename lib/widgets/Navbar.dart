@@ -29,7 +29,7 @@ class _NavbarState extends State<Navbar> {
       nextScreen = HomeScreen(isBikeMode: widget.isBikeMode);
       break;
     case 1:
-      nextScreen = FavouriteScreen(isBikeMode: widget.isBikeMode);
+      nextScreen = FavouriteScreen(isBikeMode: widget.isBikeMode, favoritePlaces: [],);
       break;
     case 2:
       // Wallet Screen (currently not implemented)

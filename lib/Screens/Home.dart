@@ -13,8 +13,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
   late Animation<double> _menuAnimation;
   final TextEditingController _searchController = TextEditingController();
@@ -32,16 +31,33 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _toggleMenu() {
-    if (_menuController.isCompleted) {
+    if (_menuController.status == AnimationStatus.completed) {
       _menuController.reverse();
     } else {
       _menuController.forward();
     }
   }
 
-  void _onSearchSubmitted(String query) {
-    // Handle the search logic (API call, navigation, etc.)
-    print("User searched for: $query");
+  void _handleSearch(String value) {
+    debugPrint("User searched for: $value");
+    // TODO: Implement search logic (API call or navigation)
+  }
+
+  void _handleTyping(String value) {
+    debugPrint("User is typing: $value");
+    // TODO: Implement suggestions logic
+  }
+
+  void _toggleMode() {
+    setState(() {
+      // Toggle between Bike and Walk mode without full rebuild
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(isBikeMode: !widget.isBikeMode),
+        ),
+      );
+    });
   }
 
   @override
@@ -58,13 +74,12 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: Stack(
         children: [
-          // Main Content
           Positioned.fill(
             child: Column(
               children: [
                 const SizedBox(height: 30),
 
-                // Top Bar
+                // 🔹 Top Navigation Bar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -78,26 +93,17 @@ class _HomeScreenState extends State<HomeScreen>
                         children: [
                           IconButton(
                             icon: const Icon(Icons.notifications, size: 30),
-                            onPressed: () {},
+                            onPressed: () {
+                              // TODO: Implement notifications
+                            },
                           ),
                           const SizedBox(width: 10),
                           IconButton(
                             icon: Icon(
-                              widget.isBikeMode
-                                  ? Icons.motorcycle
-                                  : Icons.directions_walk,
+                              widget.isBikeMode ? Icons.motorcycle : Icons.directions_walk,
                               size: 30,
                             ),
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(
-                                    isBikeMode: !widget.isBikeMode,
-                                  ),
-                                ),
-                              );
-                            },
+                            onPressed: _toggleMode,
                           ),
                         ],
                       ),
@@ -105,8 +111,9 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
 
-                // Search Bar & Transport Button
                 const Spacer(),
+
+                // 🔹 Search Bar & Transport Button
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(15),
@@ -125,35 +132,34 @@ class _HomeScreenState extends State<HomeScreen>
                   child: Column(
                     children: [
                       CustomSearchBar(
-                        controller: _searchController,
-                        onChanged: (text) {
-                          print("User is typing: $text");
-                        },
-                        onSubmitted: _onSearchSubmitted,
-                        onFavoriteTap: () {
-                          print("Favorite Icon Tapped");
-                          // Navigate to the favorite places screen if needed
-                        },
+                      controller: _searchController,
+                      onChanged: _handleTyping,
+                      onSubmitted: _handleSearch,
+                      isBikeMode: widget.isBikeMode, // ✅ Pass the value from HomeScreen
                       ),
                       const SizedBox(height: 10),
-                      PrimaryButton(text: "Transport", onPressed: () {}),
+                      PrimaryButton(
+                        text: "Transport",
+                        onPressed: () {
+                          // TODO: Implement transport button functionality
+                        },
+                      ),
                     ],
                   ),
                 ),
+
                 const Spacer(),
               ],
             ),
           ),
 
-          // Slide-out Menu (Overlays)
+          // 🔹 Sliding Menu Drawer with Animation
           AnimatedBuilder(
             animation: _menuController,
             builder: (context, child) {
               return Stack(
                 children: [
-                  // Dimmed background when menu opens
-                  if (_menuController.isCompleted ||
-                      _menuController.isAnimating)
+                  if (_menuController.isCompleted || _menuController.isAnimating)
                     GestureDetector(
                       onTap: _toggleMenu,
                       child: Container(
@@ -162,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen>
                         height: double.infinity,
                       ),
                     ),
-                  // Menu Drawer
                   Positioned(
                     left: _menuAnimation.value,
                     top: 0,

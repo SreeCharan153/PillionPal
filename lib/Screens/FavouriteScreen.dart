@@ -5,22 +5,22 @@ import '../widgets/MenuDrawer.dart';
 
 class FavouriteScreen extends StatefulWidget {
   final bool isBikeMode;
+  final List<String> favoritePlaces; // ✅ Add this parameter
 
-  const FavouriteScreen({super.key, required this.isBikeMode});
+  const FavouriteScreen({
+    Key? key,
+    required this.isBikeMode,
+    required this.favoritePlaces, // ✅ Make it required
+  }) : super(key: key);
 
   @override
   _FavouriteScreenState createState() => _FavouriteScreenState();
 }
 
-class _FavouriteScreenState extends State<FavouriteScreen> with SingleTickerProviderStateMixin {
+class _FavouriteScreenState extends State<FavouriteScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
-
-  List<Map<String, String>> addresses = [
-    {"type": "Office", "address": "2972 Westheimer Rd. Santa Ana, Illinois 85486"},
-    {"type": "Home", "address": "2972 Westheimer Rd. Santa Ana, Illinois 85486"},
-    {"type": "Office", "address": "2972 Westheimer Rd. Santa Ana, Illinois 85486"},
-    {"type": "House", "address": "2972 Westheimer Rd. Santa Ana, Illinois 85486"},
-  ];
+  List<Map<String, String>> favoriteAddresses = [];
 
   @override
   void initState() {
@@ -29,6 +29,18 @@ class _FavouriteScreenState extends State<FavouriteScreen> with SingleTickerProv
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+
+    // ✅ Load saved favorite addresses
+    _loadFavorites();
+  }
+
+  void _loadFavorites() {
+    setState(() {
+      favoriteAddresses =
+          widget.favoritePlaces
+              .map((place) => {"type": "Favorite", "address": place})
+              .toList();
+    });
   }
 
   void _toggleMenu() {
@@ -41,8 +53,15 @@ class _FavouriteScreenState extends State<FavouriteScreen> with SingleTickerProv
 
   void _removeAddress(int index) {
     setState(() {
-      addresses.removeAt(index);
+      favoriteAddresses.removeAt(index);
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Address removed from favorites"),
+        duration: Duration(seconds: 1),
+      ),
+    );
   }
 
   @override
@@ -58,40 +77,49 @@ class _FavouriteScreenState extends State<FavouriteScreen> with SingleTickerProv
     return Scaffold(
       body: Stack(
         children: [
-          // ✅ Main Content
           Scaffold(
             appBar: AppBar(
               title: Text("Favourites", style: theme.textTheme.titleLarge),
               backgroundColor: theme.scaffoldBackgroundColor,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Icons.menu), // ✅ Menu Button
+                icon: const Icon(Icons.menu),
                 onPressed: _toggleMenu,
               ),
             ),
-            body: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: addresses.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: AddressCard(
-                    locationType: addresses[index]["type"]!,
-                    address: addresses[index]["address"]!,
-                    locationColor: Colors.orange.shade700,
-                    onRemove: () => _removeAddress(index),
-                  ),
-                );
-              },
-            ),
+            body:
+                favoriteAddresses.isEmpty
+                    ? const Center(
+                      child: Text(
+                        "No favorite addresses added!",
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: favoriteAddresses.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: AddressCard(
+                            locationType: favoriteAddresses[index]["type"]!,
+                            address: favoriteAddresses[index]["address"]!,
+                            locationColor: Colors.orange.shade700,
+                            onRemove: () => _removeAddress(index),
+                          ),
+                        );
+                      },
+                    ),
             bottomNavigationBar: Navbar(
-              selectedIndex: 1, // Active tab index (Favourites)
+              selectedIndex: 1,
               isBikeMode: widget.isBikeMode,
             ),
           ),
 
-          // ✅ Sliding MenuDrawer
-          MenuDrawer(animationController: _menuController, isBikeMode: widget.isBikeMode),
+          MenuDrawer(
+            animationController: _menuController,
+            isBikeMode: widget.isBikeMode,
+          ),
         ],
       ),
     );
