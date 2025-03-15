@@ -9,13 +9,13 @@ class AboutUsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "About Us",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -28,7 +28,7 @@ class AboutUsScreen extends StatelessWidget {
             "Whether you're a daily commuter looking for a budget-friendly ride or a rider wanting to share your journey, we've got you covered!\n\n"
             "Our platform connects riders and passengers seamlessly, ensuring a smooth and hassle-free experience. "
             "We focus on providing **reliable, cost-effective, and eco-friendly** travel solutions while prioritizing safety and convenience.\n\n"
-            "🔹 **Why Choose PillionPal?**\n"
+            "🔹 Why Choose PillionPal?\n"
             "✔️ Affordable & Fast Commutes\n"
             "✔️ Verified Riders & Secure Payments\n"
             "✔️ Easy-to-Use App with Live Tracking\n"
@@ -36,7 +36,6 @@ class AboutUsScreen extends StatelessWidget {
             "Join PillionPal today and experience the future of urban mobility. Your ride, your way! 🏍️✨",
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.black54,
               height: 1.5,
             ),
           ),
