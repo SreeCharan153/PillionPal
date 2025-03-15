@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/onbording2.dart';
 import 'package:pillionpal/Screens/welcomescreen.dart';
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,

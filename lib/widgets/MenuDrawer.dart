@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../screens/Home.dart';
 //import '../screens/HistoryScreen.dart';
-//import '../screens/ComplainScreen.dart';
+import '../screens/ComplainScreen.dart';
 //import '../screens/ReferralScreen.dart';
-//import '../screens/AboutUsScreen.dart';
+import '../screens/AboutUs.dart';
 import '../screens/Settings.dart';
 //import '../screens/HelpScreen.dart';
 //import '../screens/LoginScreen.dart';
@@ -77,9 +77,9 @@ class MenuDrawer extends StatelessWidget {
                   // Menu Items
                   _menuItem(context, Icons.home, "Home", HomeScreen(isBikeMode: isBikeMode)),
                   //_menuItem(context, Icons.article, "History", const HistoryScreen()),
-                  //_menuItem(context, Icons.error_outline, "Complain", const ComplainScreen()),
+                  _menuItem(context, Icons.error_outline, "Complain", const ComplainScreen()),
                   //_menuItem(context, Icons.people_outline, "Referral", const ReferralScreen()),
-                  //_menuItem(context, Icons.info_outline, "About Us", const AboutUsScreen()),
+                  _menuItem(context, Icons.info_outline, "About Us", const AboutUsScreen()),
                   _menuItem(context, Icons.settings_outlined, "Settings", const SettingsScreen()),
                   //_menuItem(context, Icons.help_outline, "Help & Support", const HelpScreen()),
                   const Divider(), // Adds a separator before logout
