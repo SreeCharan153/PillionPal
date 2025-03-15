@@ -8,12 +8,12 @@ class CustomSearchBar extends StatefulWidget {
   final bool isBikeMode; // ✅ Add this missing property
 
   const CustomSearchBar({
-    Key? key,
+    super.key,
     this.controller,
     this.onChanged,
     this.onSubmitted,
     required this.isBikeMode, // ✅ Ensure it's required
-  }) : super(key: key);
+  });
 
   @override
   _CustomSearchBarState createState() => _CustomSearchBarState();

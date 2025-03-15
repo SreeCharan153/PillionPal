@@ -4,6 +4,8 @@ import '../widgets/InputFields.dart'; // Update path as needed
 import '../widgets/PrimaryButton.dart'; // Update path as needed
 
 class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
+
   @override
   _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
 }

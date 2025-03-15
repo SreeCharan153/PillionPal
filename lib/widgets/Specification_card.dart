@@ -11,7 +11,7 @@ class PowerCard extends StatelessWidget {
   final double padding;
 
   const PowerCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     this.icon = Icons.battery_charging_full,
@@ -20,7 +20,7 @@ class PowerCard extends StatelessWidget {
     this.textColor = Colors.black87,
     this.borderRadius = 12.0,
     this.padding = 12.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

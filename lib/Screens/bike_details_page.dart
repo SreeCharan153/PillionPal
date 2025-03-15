@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:pillionpal/Screens/RideTracking.dart';
 import 'package:pillionpal/widgets/PrimaryButton.dart';
 
 class BikeDetailsPage extends StatelessWidget {
@@ -35,7 +37,7 @@ class BikeDetailsPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(bikeName, style: const TextStyle(color: Colors.black)),
+        title: Text(bikeName),
         centerTitle: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
@@ -79,7 +81,7 @@ class BikeDetailsPage extends StatelessWidget {
                 child: PrimaryButton(
                   text: "Ride Now",
                   onPressed: () {
-                    print("Ride Now Clicked");
+                    Get.to(const RideTrackingScreen());
                   },
                 ),
               ),

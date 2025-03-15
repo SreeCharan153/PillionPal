@@ -7,11 +7,11 @@ class CouponCard extends StatelessWidget {
   final VoidCallback onCollect;
 
   const CouponCard({
-    Key? key,
+    super.key,
     required this.discountText,
     required this.offerType,
     required this.onCollect,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/route_manager.dart';
+import 'package:pillionpal/Screens/NotificationScreen.dart';
 import 'package:pillionpal/Screens/bike_list_page.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen>
                           IconButton(
                             icon: const Icon(Icons.notifications, size: 30),
                             onPressed: () {
-                              // TODO: Implement notifications
+                              Get.to(NotificationScreen());
                             },
                           ),
                           const SizedBox(width: 10),

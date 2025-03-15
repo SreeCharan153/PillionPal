@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:pillionpal/Screens/Private_Policies.dart';
 import '../Widgets/SettingsTile.dart';
-import "ChangePassword.dart"; // Ensure you have the reusable widget
+import "ChangePassword.dart";
+import 'DeleteAccount.dart'; // Ensure you have the reusable widget
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -40,7 +43,7 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 10),
             SettingsTile(
               title: "Privacy Policy",
-              onTap: () => print("Privacy Policy Clicked"),
+              onTap: () => Get.to(() => const PrivacyPolicyScreen()),
             ),
             const SizedBox(height: 10),
             SettingsTile(
@@ -50,7 +53,7 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 10),
             SettingsTile(
               title: "Delete Account",
-              onTap: () => print("Delete Account Clicked"),
+              onTap: () => Get.to(() => DeleteAccountScreen()),
             ),
           ],
         ),
