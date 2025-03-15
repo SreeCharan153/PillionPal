@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/route_manager.dart';
+import 'package:pillionpal/Screens/bike_list_page.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
@@ -13,7 +16,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
   late Animation<double> _menuAnimation;
   final TextEditingController _searchController = TextEditingController();
@@ -100,7 +104,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           const SizedBox(width: 10),
                           IconButton(
                             icon: Icon(
-                              widget.isBikeMode ? Icons.motorcycle : Icons.directions_walk,
+                              widget.isBikeMode
+                                  ? Icons.motorcycle
+                                  : Icons.directions_walk,
                               size: 30,
                             ),
                             onPressed: _toggleMode,
@@ -132,16 +138,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   child: Column(
                     children: [
                       CustomSearchBar(
-                      controller: _searchController,
-                      onChanged: _handleTyping,
-                      onSubmitted: _handleSearch,
-                      isBikeMode: widget.isBikeMode, // ✅ Pass the value from HomeScreen
+                        controller: _searchController,
+                        onChanged: _handleTyping,
+                        onSubmitted: _handleSearch,
+                        isBikeMode:
+                            widget
+                                .isBikeMode, // ✅ Pass the value from HomeScreen
                       ),
                       const SizedBox(height: 10),
                       PrimaryButton(
                         text: "Transport",
                         onPressed: () {
-                          // TODO: Implement transport button functionality
+                          if (!widget.isBikeMode) {
+                            Get.to(const BikeListPage());
+                          }
                         },
                       ),
                     ],
@@ -159,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             builder: (context, child) {
               return Stack(
                 children: [
-                  if (_menuController.isCompleted || _menuController.isAnimating)
+                  if (_menuController.isCompleted ||
+                      _menuController.isAnimating)
                     GestureDetector(
                       onTap: _toggleMenu,
                       child: Container(

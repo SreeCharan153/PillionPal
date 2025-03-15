@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/RideTracking.dart';
 import 'bike_details_page.dart';
 import '../widgets/bike_card.dart';
 
@@ -57,7 +58,10 @@ class BikeListPage extends StatelessWidget {
                 );
               },
               onRideNow: () {
-                print("Ride Now Clicked");
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const RideTrackingScreen()),
+              );
               },
             ),
           ],
