@@ -1,3 +1,4 @@
 {
-    "emulator.emulatorPath": "C:\\Users\\Cherry\\AppData\\Local\\Android\\Sdk\\emulator"
+    "emulator.emulatorPath": "C:\\Users\\Cherry\\AppData\\Local\\Android\\Sdk\\emulator",
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
