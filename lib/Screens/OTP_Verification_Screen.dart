@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/route_manager.dart';
 import 'package:pinput/pinput.dart';
 import 'package:pillionpal/Screens/SetPasswordScreen.dart';
 import '../widgets/PrimaryButton.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
-  const OTPVerificationScreen({super.key});
+  const OTPVerificationScreen({super.key, required String name, required String email, required String phone});
 
   @override
   _OTPVerificationScreenState createState() => _OTPVerificationScreenState();
@@ -27,11 +28,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       if (enteredOTP.length != 6) {
         _showSnackBar("OTP must be 6 digits!", Colors.orange);
       } else if (enteredOTP == _correctOTP) {
-        Navigator.push(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(builder: (context) => SetPasswordScreen()),
-        );
+       Get.to(SetPasswordScreen());
       } else {
         _showSnackBar("Invalid OTP! Please try again.", Colors.red);
       }

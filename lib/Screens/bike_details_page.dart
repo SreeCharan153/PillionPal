@@ -37,7 +37,7 @@ class BikeDetailsPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(bikeName, style: const TextStyle(color: Colors.black)),
+        title: Text(bikeName),
         centerTitle: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
