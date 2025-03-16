@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/Home.dart';
-import '../screens/HistoryPage.dart';
+//import '../screens/HistoryScreen.dart';
 import '../screens/ComplainScreen.dart';
 //import '../screens/ReferralScreen.dart';
 import '../screens/AboutUs.dart';
@@ -76,8 +76,8 @@ class MenuDrawer extends StatelessWidget {
                   // Menu Items
                   _menuItem(context, Icons.home, "Home", HomeScreen(isBikeMode: isBikeMode)),
                   const Divider(),
-                  _menuItem(context, Icons.article, "History", const HistoryPage()),
-                  const Divider(),
+                  //_menuItem(context, Icons.article, "History", const HistoryScreen()),
+                  //const Divider(),
                   _menuItem(context, Icons.error_outline, "Complain", const ComplainScreen()),
                   const Divider(),
                   //_menuItem(context, Icons.people_outline, "Referral", const ReferralScreen()),
