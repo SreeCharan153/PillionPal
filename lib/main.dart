@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:pillionpal/Screens/HistoryPage.dart';
 import 'package:pillionpal/Screens/onbording2.dart';
 import 'package:pillionpal/Screens/welcomescreen.dart';
 
@@ -33,8 +32,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: HistoryPage(),
-      //home: const OnboardingScreen(),
+      home: const OnboardingScreen(),
     );
   }
 }
