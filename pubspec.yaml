@@ -43,6 +43,7 @@ dependencies:
   http: ^0.13.5
   url_launcher: ^6.2.1
   geolocator: ^9.0.2
+  permission_handler: ^11.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/NotificationScreen.dart';
 import 'package:pillionpal/Screens/bike_list_page.dart';
@@ -6,6 +7,7 @@ import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
 import '../widgets/CustomSearchBar.dart';
+import '../widgets/EnableLocationDialog.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isBikeMode;
@@ -32,6 +34,41 @@ class _HomeScreenState extends State<HomeScreen>
     _menuAnimation = Tween<double>(begin: -250, end: 0).animate(
       CurvedAnimation(parent: _menuController, curve: Curves.easeInOut),
     );
+
+    _checkLocationPermission(); // ✅ Check permission on startup
+  }
+
+  // 🔹 Check & Request Location Permission
+  Future<void> _checkLocationPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      bool granted = await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const EnableLocationDialog(),
+      );
+
+      if (granted == true) {
+        _getCurrentLocation();
+      } else {
+        debugPrint("User skipped enabling location.");
+      }
+    } else {
+      _getCurrentLocation();
+    }
+  }
+
+  // 🔹 Get Current Location
+  Future<void> _getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      debugPrint("User Location: ${position.latitude}, ${position.longitude}");
+    } catch (e) {
+      debugPrint("Error getting location: $e");
+    }
   }
 
   void _toggleMenu() {
@@ -44,24 +81,15 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _handleSearch(String value) {
     debugPrint("User searched for: $value");
-    // TODO: Implement search logic (API call or navigation)
-  }
-
-  void _handleTyping(String value) {
-    debugPrint("User is typing: $value");
-    // TODO: Implement suggestions logic
   }
 
   void _toggleMode() {
-    setState(() {
-      // Toggle between Bike and Walk mode without full rebuild
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(isBikeMode: !widget.isBikeMode),
-        ),
-      );
-    });
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(isBikeMode: !widget.isBikeMode),
+      ),
+    );
   }
 
   @override
@@ -82,8 +110,6 @@ class _HomeScreenState extends State<HomeScreen>
             child: Column(
               children: [
                 const SizedBox(height: 30),
-
-                // 🔹 Top Navigation Bar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -116,10 +142,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ],
                   ),
                 ),
-
                 const Spacer(),
-
-                // 🔹 Search Bar & Transport Button
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(15),
@@ -139,11 +162,9 @@ class _HomeScreenState extends State<HomeScreen>
                     children: [
                       CustomSearchBar(
                         controller: _searchController,
-                        onChanged: _handleTyping,
+                        onChanged: _handleSearch,
                         onSubmitted: _handleSearch,
-                        isBikeMode:
-                            widget
-                                .isBikeMode, // ✅ Pass the value from HomeScreen
+                        isBikeMode: widget.isBikeMode,
                       ),
                       const SizedBox(height: 10),
                       PrimaryButton(
@@ -157,13 +178,10 @@ class _HomeScreenState extends State<HomeScreen>
                     ],
                   ),
                 ),
-
                 const Spacer(),
               ],
             ),
           ),
-
-          // 🔹 Sliding Menu Drawer with Animation
           AnimatedBuilder(
             animation: _menuController,
             builder: (context, child) {

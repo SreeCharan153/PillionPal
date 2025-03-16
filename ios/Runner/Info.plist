@@ -30,10 +30,13 @@
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<key>NSAppTransportSecurity</key>
-<dict>
     <key>NSAllowsArbitraryLoads</key>
     <true/>
-</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show nearby rides.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location for ride-sharing.</string>
+
 
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
