@@ -137,7 +137,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     text: "Cancel",
                     onPressed: () => Navigator.pop(context),
                   ),
-                ),
+                ), 
                 const SizedBox(width: 10),
                 Expanded(
                   child: PrimaryButton(
