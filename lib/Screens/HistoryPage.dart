@@ -17,7 +17,7 @@ class HistoryPage extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context); 
             },
           ),
           title: Padding(
