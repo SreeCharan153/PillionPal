@@ -40,12 +40,14 @@ dependencies:
   firebase_core: ^3.12.1
   image_picker: ^1.1.2
   get: ^4.3.8
+  http: ^0.13.5
   url_launcher: ^6.2.1
   flutter_map: ^8.1.1
   flutter_polyline_points: ^2.1.0
   geolocator: ^13.0.2
   latlong2: ^0.9.1
-  
+  geolocator: ^9.0.2
+  permission_handler: ^11.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
