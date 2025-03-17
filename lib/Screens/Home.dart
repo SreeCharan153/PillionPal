@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/NotificationScreen.dart';
 import 'package:pillionpal/Screens/bike_list_page.dart';
+import 'package:pillionpal/widgets/maps.dart'; // ✅ Import Map
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen>
   // 🔹 Check & Request Location Permission
   Future<void> _checkLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
-    
+
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       bool granted = await showDialog(
@@ -107,6 +108,11 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: Stack(
         children: [
+          // ✅ Show the Map in the background
+          const Positioned.fill(
+            child: MapBox(),
+          ),
+          
           Positioned.fill(
             child: Column(
               children: [
