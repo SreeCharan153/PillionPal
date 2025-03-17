@@ -1,6 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/RideTracking.dart';
+import 'bike_details_page.dart';
 import '../widgets/bike_card.dart';
 
 class BikeListPage extends StatelessWidget {
@@ -23,59 +23,45 @@ class BikeListPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        // Ensures scrolling
         child: Column(
           children: [
             BikeCard(
               bikeName: "TVS Apache RTR 160",
-              imageUrl:
-                  "assets/images/Biles/bike_1.png", // Replace with a valid image URL
+              imageUrl: "assets/images/Biles/bike_1.png",
               transmission: "Manual",
               seats: "1",
-              fuelType: "Petrol",
+              fair: "₹100",
               distance: "800m",
               timeAway: "5 mins",
               onViewDetails: () {
-                print("View Details Clicked");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => BikeDetailsPage(
+                          bikeName: "TVS Apache RTR 160",
+                          imageUrl: "assets/images/Biles/bike_1.png",
+                          maxPower: "2500hp",
+                          fair: "₹100",
+                          maxSpeed: "230kph",
+                          acceleration: "2.5 sec",
+                          riderName: "Sergio Ramasis",
+                          gender: "Male",
+                          bikeNo: "AP 13 AH XXXX",
+                          licenceNo: "DL14 20110012345",
+                        ),
+                  ),
+                );
               },
               onRideNow: () {
-                print("Ride Now Clicked");
-              },
-            ),
-            BikeCard(
-              bikeName: "Yamaha R15",
-              imageUrl:
-                  "assets/images/Biles/bike_2.png", // Replace with a valid image URL
-              transmission: "Manual",
-              seats: "1",
-              fuelType: "Petrol",
-              distance: "800m",
-              timeAway: "5 mins",
-              onViewDetails: () {
-                print("View Details Clicked");
-              },
-              onRideNow: () {
-                print("Ride Now Clicked");
-              },
-            ),
-            BikeCard(
-              bikeName: "Honda CB Hornet",
-              imageUrl:
-                  "assets/images/Biles/bike_3.png", // Replace with a valid image URL
-              transmission: "Manual",
-              seats: "1",
-              fuelType: "Petrol",
-              distance: "800m",
-              timeAway: "5 mins",
-              onViewDetails: () {
-                print("View Details Clicked");
-              },
-              onRideNow: () {
-                print("Ride Now Clicked");
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const RideTrackingScreen()),
+              );
               },
             ),
           ],

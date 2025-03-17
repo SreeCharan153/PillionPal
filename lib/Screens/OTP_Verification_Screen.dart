@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/route_manager.dart';
 import 'package:pinput/pinput.dart';
 import 'package:pillionpal/Screens/SetPasswordScreen.dart';
 import '../widgets/PrimaryButton.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
-  const OTPVerificationScreen({super.key});
+  const OTPVerificationScreen({super.key, required String name, required String email, required String phone});
 
   @override
   _OTPVerificationScreenState createState() => _OTPVerificationScreenState();
@@ -27,10 +28,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       if (enteredOTP.length != 6) {
         _showSnackBar("OTP must be 6 digits!", Colors.orange);
       } else if (enteredOTP == _correctOTP) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SetPasswordScreen()),
-        );
+       Get.to(SetPasswordScreen());
       } else {
         _showSnackBar("Invalid OTP! Please try again.", Colors.red);
       }
@@ -53,9 +51,9 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       appBar: AppBar(
         leading: const BackButton(color: Colors.black),
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           reverse: true,

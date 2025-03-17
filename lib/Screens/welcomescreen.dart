@@ -11,7 +11,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Wrap the content in SingleChildScrollView to prevent overflow on smaller screens
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           // Constrain the content to at least fill the screen's height
@@ -34,34 +34,25 @@ class WelcomeScreen extends StatelessWidget {
 
                     // App Title
                     Text(
-                      "College Ride",
+                      "PillionPal",
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: 1.2,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 10),
 
                     // Welcome Text
-                    const Text(
+                    Text(
                       "Welcome",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 5),
 
                     // Subtitle
-                    const Text(
+                    Text(
                       "Have a better sharing experience",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 30),
 

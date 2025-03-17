@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
-        android:label="my_flutter_app"
+        android:label="PillionPal"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -30,6 +31,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+        <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>-->
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -40,6 +45,9 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <intent>
+             <action android:name="android.intent.action.DIAL" />
         </intent>
     </queries>
 </manifest>

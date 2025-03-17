@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/OTP_Verification_Screen.dart';
 import 'package:pillionpal/Screens/login_screen.dart';
 import '../widgets/InputFields.dart';
@@ -62,20 +63,13 @@ class _SignupPageState extends State<SignupPage> {
     }
 
     // Navigate to OTP Verification Screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => OTPVerificationScreen(), // 🔥 Navigate to OTP Screen
-      ),
-    );
-
+    Get.to(() => OTPVerificationScreen(name: name, email: email, phone: phone));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -99,6 +93,7 @@ class _SignupPageState extends State<SignupPage> {
               InputFields.buildTextField(
                 hint: "Full Name",
                 controller: nameController,
+                context: context,
               ),
               const SizedBox(height: 16),
 
@@ -107,11 +102,15 @@ class _SignupPageState extends State<SignupPage> {
                 hint: "Email",
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
+                context: context,
               ),
               const SizedBox(height: 16),
 
               // Phone Number
-              InputFields.buildPhoneNumberField(controller: phoneController),
+              InputFields.buildPhoneNumberField(
+                controller: phoneController,
+                context: context,
+              ),
               const SizedBox(height: 16),
 
               // Gender Dropdown 🔥

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pillionpal/Screens/BikeDetailsScreen.dart';
-import 'package:pillionpal/Screens/bike_list_page.dart';
+import 'package:pillionpal/Screens/Home.dart';
 import '../widgets/SecondaryButton.dart'; // Import SecondaryButton
 import '../widgets/PrimaryButton.dart'; // Import PrimaryButton
 
@@ -26,7 +26,7 @@ class RoleSelectionPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -63,7 +63,7 @@ class RoleSelectionPage extends StatelessWidget {
                   // Handle Pillion Selection
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BikeListPage()),
+                    MaterialPageRoute(builder: (context) => HomeScreen(isBikeMode: false)),
                   );
                 },
                 width: double.infinity,
