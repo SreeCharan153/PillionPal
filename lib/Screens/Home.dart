@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/NotificationScreen.dart';
-import 'package:pillionpal/Screens/bike_list_page.dart';
+import 'package:pillionpal/widgets/location_select.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
   // 🔹 Check & Request Location Permission
   Future<void> _checkLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
-    
+
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       bool granted = await showDialog(
@@ -65,7 +65,8 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> _getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.high,
+      );
       debugPrint("User Location: ${position.latitude}, ${position.longitude}");
     } catch (e) {
       debugPrint("Error getting location: $e");
@@ -171,9 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
                       PrimaryButton(
                         text: "Transport",
                         onPressed: () {
-                          if (!widget.isBikeMode) {
-                            Get.to(const BikeListPage());
-                          }
+                          showTransportPopup(context);
                         },
                       ),
                     ],
