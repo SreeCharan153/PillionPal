@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-//import 'package:get/get.dart';
-import 'package:pillionpal/widgets/PrimaryButton.dart'; // For navigation if needed
+import 'package:get/get.dart';
+import 'package:pillionpal/Screens/bike_list_page.dart';
+import 'package:pillionpal/Screens/login_screen.dart';
+import 'package:pillionpal/widgets/PrimaryButton.dart';
 
-void showTransportPopup(BuildContext context) {
+void showTransportPopup(BuildContext context, bool isBikeMode) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -10,28 +12,39 @@ void showTransportPopup(BuildContext context) {
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (context) {
-      return const TransportPopup();
+      return TransportPopup(isBikeMode: isBikeMode);
     },
   );
-} 
+}
 
 class TransportPopup extends StatelessWidget {
-  const TransportPopup({super.key});
+  final bool isBikeMode;
+
+  const TransportPopup({super.key, required this.isBikeMode});
+
+  void NextScreen() {
+    if (isBikeMode) {
+      Get.to(LoginPage());
+    } else {
+      Get.to(BikeListPage());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.4, // Initial height of the sheet (40% of screen)
-      minChildSize: 0.3, // Minimum height when dragged down
-      maxChildSize: 0.9, // Maximum height when dragged up
-      expand: false, // Prevents it from taking full screen immediately
+      initialChildSize: 0.4, // Initial height (40% of the screen)
+      minChildSize: 0.3, // Minimum height
+      maxChildSize: 0.9, // Maximum height
+      expand: false, // Prevents it from covering full screen immediately
       builder: (context, scrollController) {
         return Material(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           child: SingleChildScrollView(
             controller: scrollController, // Enables scrolling within the sheet
             child: Padding(
-              padding: MediaQuery.of(context).viewInsets, // Adjust for keyboard
+              padding:
+                  MediaQuery.of(context).viewInsets, // Adjusts for keyboard
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -49,7 +62,7 @@ class TransportPopup extends StatelessWidget {
                   const SizedBox(height: 10),
                   const Center(
                     child: Text(
-                      "Select address",
+                      "Select Address",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -67,27 +80,41 @@ class TransportPopup extends StatelessWidget {
                     hint: "Drop Location",
                   ),
                   const SizedBox(height: 20),
-                  const Text('Your Previous Location'),
-                  TextButton(
-                    onPressed: () {
-                      // Handle previous locations
-                    },
+
+                  // Previous Location Section
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      "Your Previous Location",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextButton(
-                      onPressed: () => {},
+                      onPressed: () {
+                        // Handle selection of previous location
+                      },
                       child: const Text("Chicago"),
                     ),
                   ),
 
+                  const SizedBox(height: 20),
+
+                  // Confirm Button
                   Center(
                     child: IntrinsicWidth(
                       child: PrimaryButton(
                         text: 'Confirm',
-                        onPressed: () => {},
+                        onPressed: () {
+                          NextScreen();
+                        },
                       ),
                     ),
                   ),
-
-                  // Extra space for better scrolling
                 ],
               ),
             ),
@@ -102,8 +129,7 @@ class LocationField extends StatelessWidget {
   final IconData icon;
   final String hint;
 
-  const LocationField({Key? key, required this.icon, required this.hint})
-    : super(key: key);
+  const LocationField({super.key, required this.icon, required this.hint});
 
   @override
   Widget build(BuildContext context) {
