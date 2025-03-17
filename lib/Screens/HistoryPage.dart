@@ -5,105 +5,29 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = const Color.fromRGBO(0, 137, 85, 1); // PillionPal theme green
+    final theme = Theme.of(context);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: theme.appBarTheme.backgroundColor,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.arrow_back_ios, color: theme.iconTheme.color),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text('History'),
-          ),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: "Upcoming"),
-              Tab(text: "Completed"),
-              Tab(text: "Cancelled"),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            ListTileWidget(listType: "Upcoming"),
-            ListTileWidget(listType: "Completed"),
-            ListTileWidget(listType: "Cancelled"),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ListTileWidget extends StatelessWidget {
-  final String listType;
-
-  const ListTileWidget({required this.listType, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ListTile(
-            title: Text('$listType Item $index'),
-            subtitle: Text('Subtitle $index'),
-          ),
-        );
-      },
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
-
-class HistoryPage extends StatelessWidget {
-  const HistoryPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = Color.fromRGBO(0, 137, 85, 1); // PillionPal theme green
-
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
-            onPressed: () {
-              Navigator.pop(context); 
-            },
-          ),
-          title: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text(
-              'History',
-              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 20),
-            ),
+          title: Text(
+            'History',
+            style: TextStyle(color: theme.textTheme.bodyLarge?.color, fontSize: 20),
           ),
           bottom: TabBar(
             indicatorColor: primaryColor,
-            labelColor: Theme.of(context).textTheme.bodyLarge?.color,
+            labelColor: theme.textTheme.bodyLarge?.color,
             unselectedLabelColor: Colors.grey,
             tabs: const [
               Tab(text: "Upcoming"),
@@ -112,11 +36,11 @@ class HistoryPage extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
-            ListTileWidget(listType: "Upcoming"),
-            ListTileWidget(listType: "Completed"),
-            ListTileWidget(listType: "Cancelled"),
+            HistoryList(listType: "Upcoming"),
+            HistoryList(listType: "Completed"),
+            HistoryList(listType: "Cancelled"),
           ],
         ),
       ),
@@ -124,24 +48,30 @@ class HistoryPage extends StatelessWidget {
   }
 }
 
-class ListTileWidget extends StatelessWidget {
+class HistoryList extends StatelessWidget {
   final String listType;
 
-  const ListTileWidget({required this.listType, super.key});
+  const HistoryList({required this.listType, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     final cardColor = isDarkMode ? Colors.grey[900] : Colors.white;
-    final textColor = isDarkMode ? Colors.white : Colors.black;
+    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
     final subtitleColor = isDarkMode ? Colors.grey : Colors.black54;
+    final iconColor = listType == "Upcoming"
+        ? Colors.amber
+        : listType == "Completed"
+            ? const Color.fromRGBO(0, 137, 85, 1)
+            : Colors.red;
 
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: 10,
       itemBuilder: (context, index) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: cardColor,
             borderRadius: BorderRadius.circular(12),
@@ -152,22 +82,12 @@ class ListTileWidget extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.2),
                       blurRadius: 6,
                       spreadRadius: 2,
-                    )
+                    ),
                   ],
           ),
           child: ListTile(
-            leading: Icon(
-              listType == "Upcoming"
-                  ? Icons.schedule
-                  : listType == "Completed"
-                      ? Icons.check_circle
-                      : Icons.cancel,
-              color: listType == "Upcoming"
-                  ? Colors.amber
-                  : listType == "Completed"
-                      ? Color.fromRGBO(0, 137, 85, 1)
-                      : Colors.red,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            leading: Icon(Icons.directions_bike, color: iconColor, size: 28),
             title: Text(
               '$listType Ride $index',
               style: TextStyle(color: textColor, fontSize: 16),
