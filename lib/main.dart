@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: const OnboardingScreen(),
+      //home: const ProfileScreen(),
     );
   }
 }

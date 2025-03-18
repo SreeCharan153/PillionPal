@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/NotificationScreen.dart';
-import 'package:pillionpal/widgets/location_select.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
 import '../widgets/CustomSearchBar.dart';
 import '../widgets/EnableLocationDialog.dart';
-
+import '../widgets/maps.dart';
+import '../widgets/location_select.dart';
 class HomeScreen extends StatefulWidget {
   final bool isBikeMode;
 
@@ -108,6 +108,11 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: Stack(
         children: [
+          // ✅ Show the Map in the background
+          const Positioned.fill(
+            child: MapBox(),
+          ),
+          
           Positioned.fill(
             child: Column(
               children: [
@@ -172,13 +177,13 @@ class _HomeScreenState extends State<HomeScreen>
                       PrimaryButton(
                         text: "Transport",
                         onPressed: () {
-                          showTransportPopup(context, widget.isBikeMode);
+                          showTransportPopup(context,widget.isBikeMode);
                         },
                       ),
                     ],
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 30),
               ],
             ),
           ),
