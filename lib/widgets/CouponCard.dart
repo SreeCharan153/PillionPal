@@ -15,19 +15,23 @@ class CouponCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8), // Adds spacing between cards
+      margin: const EdgeInsets.symmetric(
+        vertical: 8,
+      ), // Adds spacing between cards
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color.fromRGBO(0, 137, 85, 1), width: 1),
+        border: Border.all(color: Colors.grey.shade300, width: 1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Discount Text Section
-          Expanded(  // Ensures text does not shrink
+          Expanded(
+            // Ensures text does not shrink
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -42,10 +46,7 @@ class CouponCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   offerType,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ],
             ),
@@ -53,12 +54,9 @@ class CouponCard extends StatelessWidget {
 
           // Collect Button with fixed size
           SizedBox(
-            width: 100,  // Increased width to prevent text breaking
+            width: 100, // Increased width to prevent text breaking
             height: 40,
-            child: PrimaryButton(
-              text: "Collect",
-              onPressed: onCollect,
-            ),
+            child: PrimaryButton(text: "Collect", onPressed: onCollect),
           ),
         ],
       ),
