@@ -11,53 +11,47 @@ class MapBox extends StatefulWidget {
 }
 
 class _MapBoxState extends State<MapBox> {
+  final MapController _mapController = MapController();
   LatLng? _currentLocation;
-  bool _isLoading = true; // Loading state for UI feedback
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _fetchUserLocation();
+    _startLocationUpdates();
   }
 
-  // 🔹 Fetch User Location
-  Future<void> _fetchUserLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      permission = await Geolocator.requestPermission();
-    }
-
-    if (permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always) {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+  // 🔹 Track User's Movement
+  void _startLocationUpdates() {
+    Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 5, // Updates location every 5 meters
+      ),
+    ).listen((Position position) {
       setState(() {
         _currentLocation = LatLng(position.latitude, position.longitude);
         _isLoading = false;
       });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      debugPrint("Location permission denied.");
-    }
+
+      // Move the map to the new location
+      _mapController.move(_currentLocation!, _mapController.zoom);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Your Location')),
+      appBar: AppBar(title: const Text('Live Location Tracking')),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator()) // Show loading state
+          ? const Center(child: CircularProgressIndicator())
           : _currentLocation == null
               ? const Center(child: Text("Unable to fetch location"))
               : FlutterMap(
+                  mapController: _mapController,
                   options: MapOptions(
-                    initialCenter: _currentLocation!, // 🌍 Center map on user's location
-                    minZoom: 10.0,
-                    maxZoom: 18.0,
+                    initialCenter: _currentLocation!,
+                    initialZoom: 15.0,
                   ),
                   children: [
                     TileLayer(
@@ -69,7 +63,11 @@ class _MapBoxState extends State<MapBox> {
                           width: 80.0,
                           height: 80.0,
                           point: _currentLocation!,
-                          child: const Icon(Icons.location_pin, color: Color.fromRGBO(0, 137, 85, 1), size: 40.0),
+                          child: const Icon(
+                            Icons.location_pin,
+                            color: Color.fromRGBO(0, 137, 85, 1),
+                            size: 40.0,
+                          ),
                         ),
                       ],
                     ),
