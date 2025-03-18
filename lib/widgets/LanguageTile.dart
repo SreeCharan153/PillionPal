@@ -8,13 +8,13 @@ class LanguageTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const LanguageTile({
-    Key? key,
+    super.key,
     required this.languageName,
     required this.languageCode,
     required this.flagAsset,
     required this.isSelected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
