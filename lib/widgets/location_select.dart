@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:pillionpal/Screens/bike_list_page.dart';
-import 'package:pillionpal/Screens/login_screen.dart';
+// import 'package:pillionpal/Screens/login_screen.dart';
 import 'package:get/get.dart';
+import 'package:pillionpal/Screens/pillion_list_page.dart';
 import 'package:pillionpal/widgets/PrimaryButton.dart'; // For navigation if needed
 
 void showTransportPopup(BuildContext context, bool isBikeMode) {
@@ -23,7 +24,7 @@ class TransportPopup extends StatelessWidget {
   final bool isBikeMode;
   void NextScreen() {
     if (isBikeMode) {
-      Get.to(LoginPage());
+      Get.to(PillionListPage());
     } else {
       Get.to(BikeListPage());
     }
