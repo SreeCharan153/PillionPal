@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/ProfileScreen.dart';
 import '../Screens/Home.dart';
 import '../Screens/FavouriteScreen.dart';
 //import 'wallet_screen.dart';
@@ -38,7 +39,7 @@ class _NavbarState extends State<Navbar> {
       nextScreen = OfferScreen(isBikeMode: widget.isBikeMode);
       break;
     case 4:
-      // Profile Screen (currently not implemented)
+      nextScreen = ProfileScreen();
       return;
     default:
       return;
