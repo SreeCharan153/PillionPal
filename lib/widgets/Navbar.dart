@@ -61,6 +61,7 @@ class _NavbarState extends State<Navbar> {
       onTap: _onItemTapped,
       selectedItemColor: const Color.fromRGBO(0, 137, 85, 1),
       unselectedItemColor: Colors.grey,
+      type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(icon: const Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(
