@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
                       PrimaryButton(
                         text: "Transport",
                         onPressed: () {
-                          showTransportPopup(context);
+                          showTransportPopup(context, widget.isBikeMode);
                         },
                       ),
                     ],

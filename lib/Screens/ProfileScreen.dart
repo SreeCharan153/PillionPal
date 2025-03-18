@@ -1,140 +1,144 @@
 import 'package:flutter/material.dart';
+import '../widgets/navbar.dart';
+import '../widgets/MenuDrawer.dart';
 
-void main() {
-  runApp(const MaterialApp(home: ProfileScreen()));
+class ProfileScreen extends StatefulWidget {
+  final bool isBikeMode;
+  const ProfileScreen({super.key, required this.isBikeMode});
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _menuController;
+
+  @override
+  void initState() {
+    super.initState();
+    _menuController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
+  @override
+  void dispose() {
+    _menuController.dispose();
+    super.dispose();
+  }
+
+  void _toggleMenu() {
+    if (_menuController.isCompleted) {
+      _menuController.reverse();
+    } else {
+      _menuController.forward();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "Profile",
-          style: TextStyle( fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
+    final theme = Theme.of(context);
 
-            // Profile Image
-            Center(
-              child: Stack(
+    return Scaffold(
+      body: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text("Profile", style: theme.textTheme.titleLarge),
+              backgroundColor: theme.scaffoldBackgroundColor,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: _toggleMenu,
+              ),
+            ),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('assets/profile.png'), // Replace with actual image
+                  Center(
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+
+                          backgroundColor: theme.scaffoldBackgroundColor,
+
+                          child: Icon(Icons.person),
+                        ),
+                        Positioned(
+                          bottom: 2,
+                          right: 2,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.green,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Positioned(
-                    bottom: 2,
-                    right: 2,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.green,
-                        border: Border.all(color: Colors.white, width: 2),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Nate Samson",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 20),
+
+                  _infoCard("Email", "nate@email.com"),
+                  _infoCard("Phone", "+91 9876543210"),
+                  _infoCard("Gender", "Male"),
+                  _infoCard("Address", "123, Street Name, City, India"),
+
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.scaffoldBackgroundColor,
+                      side: const BorderSide(color: Colors.white, width: 2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 12,
                       ),
                     ),
-                  )
+                    child: const Text("Logout", style: TextStyle(fontSize: 16)),
+                  ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 10),
-
-            // Name
-            const Text(
-              "Nate Samson",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            bottomNavigationBar: Navbar(
+              selectedIndex: 4,
+              isBikeMode: widget.isBikeMode,
             ),
-
-            const SizedBox(height: 20),
-
-            // Information Cards
-            InfoCard(label: "Email", value: "nate@email.com"),
-            InfoCard(label: "Phone", value: "+91 9876543210", leadingIcon: Icons.flag),
-            InfoCard(label: "Gender", value: "Male"),
-            InfoCard(label: "Address", value: "123, Street Name, City, India"),
-
-            const SizedBox(height: 20),
-
-            // Logout Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Logout logic here
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.green, width: 2),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: const Text(
-                  "Logout",
-                  style: TextStyle(color: Colors.green, fontSize: 16),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 4, // Profile Tab Active
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: "Favourite"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.local_offer), label: "Offer"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          ),
+          MenuDrawer(
+            animationController: _menuController,
+            isBikeMode: widget.isBikeMode,
+          ),
         ],
       ),
-
-      // Floating Action Button (for Wallet)
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.green,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.account_balance_wallet, size: 30),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-}
 
-// Widget to Display User Information
-class InfoCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final IconData? leadingIcon;
-
-  const InfoCard({Key? key, required this.label, required this.value, this.leadingIcon}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _infoCard(String label, String value, {IconData? leadingIcon}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
         decoration: BoxDecoration(
@@ -144,14 +148,8 @@ class InfoCard extends StatelessWidget {
         child: Row(
           children: [
             if (leadingIcon != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Icon(leadingIcon, color: Colors.orange),
-              ),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 16, color: Colors.black87),
-            ),
+              Padding(padding: const EdgeInsets.only(right: 8)),
+            Text(value, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),

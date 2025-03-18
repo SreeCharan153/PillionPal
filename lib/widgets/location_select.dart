@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-//import 'package:get/get.dart';
+import 'package:pillionpal/Screens/bike_list_page.dart';
+import 'package:pillionpal/Screens/login_screen.dart';
+import 'package:get/get.dart';
 import 'package:pillionpal/widgets/PrimaryButton.dart'; // For navigation if needed
 
-void showTransportPopup(BuildContext context) {
+void showTransportPopup(BuildContext context, bool isBikeMode) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -10,13 +12,21 @@ void showTransportPopup(BuildContext context) {
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (context) {
-      return const TransportPopup();
+      return TransportPopup(isBikeMode: isBikeMode);
     },
   );
-} 
+}
 
 class TransportPopup extends StatelessWidget {
-  const TransportPopup({super.key});
+  const TransportPopup({super.key, required this.isBikeMode});
+  final bool isBikeMode;
+  void NextScreen() {
+    if (isBikeMode) {
+      Get.to(LoginPage());
+    } else {
+      Get.to(BikeListPage());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +92,7 @@ class TransportPopup extends StatelessWidget {
                     child: IntrinsicWidth(
                       child: PrimaryButton(
                         text: 'Confirm',
-                        onPressed: () => {},
+                        onPressed: () => {NextScreen()},
                       ),
                     ),
                   ),
