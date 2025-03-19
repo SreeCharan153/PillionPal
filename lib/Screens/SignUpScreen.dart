@@ -57,8 +57,6 @@ class _SignupPageState extends State<SignupPage> {
           await _auth.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseAuthException e) {
-          print("Error: $e");
-          //print("Stack Trace: $stackTrace");
          _showSnackbar("Error: ${e.toString()}", Colors.red);
         },
         codeSent: (String verificationId, int? resendToken) {
