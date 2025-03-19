@@ -70,7 +70,7 @@ class PillionListPage extends StatelessWidget {
                             "assets/images/profile.png", // Replace with actual path
                         distance: "800m",
                         timeAway: "5 mins",
-                        phoneNumber: '9876543210',
+                        phoneNumber: "9876543210",
                       ),
                 );
               },
