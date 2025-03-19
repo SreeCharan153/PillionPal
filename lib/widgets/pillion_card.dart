@@ -131,7 +131,7 @@ class PillionCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: PrimaryButton(text: "Request Ride", onPressed: onRequestRide),
+                child: PrimaryButton(text: "Accept Ride", onPressed: onRequestRide),
               ),
             ],
           ),
