@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '209196809810',
     projectId: 'pillionpal-25a60',
     storageBucket: 'pillionpal-25a60.firebasestorage.app',
+    iosClientId: '209196809810-d5frai4ogo5bnarfs9mlhmuo2igof98q.apps.googleusercontent.com',
     iosBundleId: 'com.example.myFlutterApp',
   );
 
@@ -73,6 +74,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '209196809810',
     projectId: 'pillionpal-25a60',
     storageBucket: 'pillionpal-25a60.firebasestorage.app',
+    iosClientId: '209196809810-d5frai4ogo5bnarfs9mlhmuo2igof98q.apps.googleusercontent.com',
     iosBundleId: 'com.example.myFlutterApp',
   );
 
@@ -85,4 +87,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'pillionpal-25a60.firebasestorage.app',
     measurementId: 'G-7K479L1548',
   );
+
 }

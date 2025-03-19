@@ -1,6 +1,9 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously, duplicate_ignore
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pillionpal/Screens/RoleSelectionPage.dart';
 import 'package:pillionpal/Screens/SignUpScreen.dart';
 import '../widgets/InputFields.dart';
@@ -19,41 +22,89 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false; // 🔥 Password visibility state
 
-  void _signIn() {
+  // 🔹 Firebase Authentication Instance
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // 🔹 Function to Handle Email & Password Login
+  Future<void> _signIn() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("All fields are required"),
-          backgroundColor: Color.fromRGBO(0, 137, 85, 1),
-        ),
-      );
+      _showSnackbar("All fields are required", Colors.red);
       return;
     }
 
-    if (email == "Admin@gmail.com" && password == "admin123") {
-      Navigator.push(
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // 🔹 Save login state
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+
+      // 🔹 Navigate to Role Selection Page
+      Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (context) => const RoleSelectionPage()),
       );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Invalid email or password"),
-          backgroundColor: Colors.red,
-        ),
-      );
+    } catch (e) {
+      _showSnackbar("Invalid email or password", Colors.red);
     }
   }
 
-  void _sendPasswordReset() {
+  // 🔹 Google Sign-In
+  Future<void> _signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return;
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+
+      // 🔹 Save login state
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+
+      // 🔹 Navigate to Role Selection Page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const RoleSelectionPage()),
+      );
+    } catch (e) {
+      _showSnackbar("Google Sign-In failed", Colors.red);
+    }
+  }
+
+  // 🔹 Forgot Password
+  Future<void> _sendPasswordReset() async {
+    String email = emailController.text.trim();
+
+    if (email.isEmpty) {
+      _showSnackbar("Enter your email to reset password", Colors.red);
+      return;
+    }
+
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      _showSnackbar("Password Reset Link Sent to your Email", Colors.green);
+    } catch (e) {
+      _showSnackbar("Failed to send reset email", Colors.red);
+    }
+  }
+
+  // 🔹 Show SnackBar
+  void _showSnackbar(String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Password Reset Link Sent to your Email"),
-        backgroundColor: Colors.red,
-      ),
+      SnackBar(content: Text(message), backgroundColor: color),
     );
   }
 
@@ -85,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                 hint: "Enter your email",
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                context: context
+                context: context,
               ),
               const SizedBox(height: 16),
 
@@ -141,20 +192,18 @@ class _LoginPageState extends State<LoginPage> {
 
               // Google Sign-in Button
               CustomButtons.buildOutlinedButton(
-                text: "Sign in with Gmail",
+                text: "Sign in with Google",
                 icon: FontAwesomeIcons.google,
-                onPressed: () {
-                  // TODO: Implement Google Sign-In
-                },
+                onPressed: _signInWithGoogle,
               ),
               const SizedBox(height: 10),
 
-              // Apple Sign-in Button
+              // Apple Sign-in Button (TODO)
               CustomButtons.buildOutlinedButton(
                 text: "Sign in with Apple",
                 icon: Icons.apple,
                 onPressed: () {
-                   // TODO: Implement Apple Sign-In
+                  _showSnackbar("Apple Sign-In Coming Soon!", Colors.orange);
                 },
               ),
               const SizedBox(height: 20),
