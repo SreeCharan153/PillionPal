@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:get/route_manager.dart';
 // import 'package:pillionpal/Screens/RideTracking.dart';
-import 'package:pillionpal/widgets/PrimaryButton.dart';
+import 'package:pillionpal/widgets/PrimaryButton.dart' as primary_button;
 import '../widgets/Ride_request_popup.dart';
 
 class PillionDetailsPage extends StatelessWidget {
@@ -13,6 +13,7 @@ class PillionDetailsPage extends StatelessWidget {
   final String priceShare;
   final String totalDistance;
   final String imageUrl;
+  final String phonenumber;
 
   const PillionDetailsPage({
     super.key,
@@ -24,6 +25,7 @@ class PillionDetailsPage extends StatelessWidget {
     required this.priceShare,
     required this.totalDistance,
     required this.imageUrl,
+    required this.phonenumber,
   });
 
   @override
@@ -66,7 +68,7 @@ class PillionDetailsPage extends StatelessWidget {
 
               // "Accept Ride" Button using PrimaryButton
               Center(
-                child: PrimaryButton(
+                child: primary_button.PrimaryButton(
                   text: "Accept Ride",
                   onPressed: () {
                     showModalBottomSheet(
@@ -77,12 +79,13 @@ class PillionDetailsPage extends StatelessWidget {
                         ),
                       ),
                       builder:
-                          (context) => const RideRequestPopup(
+                          (context) => RideRequestPopup(
                             name: "John Doe",
                             imageUrl:
                                 "assets/images/profile.png", // Replace with actual path
                             distance: "800m",
                             timeAway: "5 mins",
+                            phoneNumber: phonenumber,
                           ),
                     );
                   },

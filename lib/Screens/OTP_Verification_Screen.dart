@@ -13,12 +13,12 @@ class OTPVerificationScreen extends StatefulWidget {
   final String verificationId; // ✅ Added for OTP verification
 
   const OTPVerificationScreen({
-    Key? key,
+    super.key,
     required this.name,
     required this.email,
     required this.phone,
     required this.verificationId, // ✅ Ensure it's required
-  }) : super(key: key);
+  });
 
   @override
   _OTPVerificationScreenState createState() => _OTPVerificationScreenState();

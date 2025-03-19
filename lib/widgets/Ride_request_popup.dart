@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:pillionpal/widgets/PrimaryButton.dart';
+import 'package:pillionpal/widgets/SecondaryButton.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class CallHelper {
+  static Future<void> makeCall(String phoneNumber) async {
+    final Uri callUri = Uri(scheme: 'tel', path: phoneNumber);
+
+    if (await canLaunchUrl(callUri)) {
+      await launchUrl(callUri);
+    } else {
+      Get.snackbar(
+        "Error",
+        "Could not launch call",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+}
 
 class RideRequestPopup extends StatelessWidget {
   final String name;
   final String imageUrl;
   final String distance;
   final String timeAway;
+  final String phoneNumber;
 
   const RideRequestPopup({
     super.key,
@@ -12,6 +33,7 @@ class RideRequestPopup extends StatelessWidget {
     required this.imageUrl,
     required this.distance,
     required this.timeAway,
+    required this.phoneNumber,
   });
 
   @override
@@ -41,17 +63,17 @@ class RideRequestPopup extends StatelessWidget {
           const SizedBox(height: 15),
           Row(
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage(imageUrl),
-              ),
+              CircleAvatar(radius: 30, backgroundImage: AssetImage(imageUrl)),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     "$distance ($timeAway away)",
@@ -65,29 +87,24 @@ class RideRequestPopup extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _actionButton(Icons.call, "Call", Colors.green, Colors.white),
-              _actionButton(Icons.message, "Message", Colors.white, Colors.green),
+              Expanded(
+                child: PrimaryButton(
+                  /*icon: Icons.call,*/ text: "Call",
+                  onPressed: () {
+                    CallHelper.makeCall(phoneNumber);
+                  },
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: SecondaryButton(
+                  /*icon: Icons.message,*/ text: "Message",
+                  onPressed: () {},
+                ),
+              ),
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _actionButton(IconData icon, String text, Color bgColor, Color textColor) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.green),
-        ),
-        child: TextButton.icon(
-          onPressed: () {},
-          icon: Icon(icon, color: textColor),
-          label: Text(text, style: TextStyle(color: textColor)),
-        ),
       ),
     );
   }

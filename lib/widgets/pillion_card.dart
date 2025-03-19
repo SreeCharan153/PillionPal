@@ -10,6 +10,7 @@ class PillionCard extends StatelessWidget {
   final String priceShare;
   final VoidCallback onViewDetails;
   final VoidCallback onRequestRide;
+  final String phonenumber;
 
   const PillionCard({
     super.key,
@@ -20,6 +21,7 @@ class PillionCard extends StatelessWidget {
     required this.priceShare,
     required this.onViewDetails,
     required this.onRequestRide,
+    required this.phonenumber,
   });
 
   @override

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/route_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pillionpal/Screens/RoleSelectionPage.dart';
@@ -36,21 +37,14 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       // 🔹 Save login state
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
 
       // 🔹 Navigate to Role Selection Page
-      Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(builder: (context) => const RoleSelectionPage()),
-      );
+      Get.to(RoleSelectionPage());
     } catch (e) {
       _showSnackbar("Invalid email or password", Colors.red);
     }
@@ -62,7 +56,8 @@ class _LoginPageState extends State<LoginPage> {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) return;
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -103,9 +98,9 @@ class _LoginPageState extends State<LoginPage> {
 
   // 🔹 Show SnackBar
   void _showSnackbar(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: color),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 
   @override
@@ -215,12 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                   const Text("Don't have an account?"),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignupPage(),
-                        ),
-                      );
+                      Get.to(SignupPage());
                     },
                     child: const Text(
                       "Sign Up",

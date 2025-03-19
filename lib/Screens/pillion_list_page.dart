@@ -35,6 +35,7 @@ class PillionListPage extends StatelessWidget {
               pickupPoint: 'Maddilapalem',
               dropPoint: 'Dakamarri',
               priceShare: '50',
+              phonenumber: '9876543210',
               onViewDetails: () {
                 Navigator.push(
                   context,
@@ -49,6 +50,7 @@ class PillionListPage extends StatelessWidget {
                           totalDistance: '40 KM',
                           imageUrl: "assets/images/profile.png",
                           gender: "Male",
+                          phonenumber: '9876543210',
                         ),
                   ),
                 );
@@ -68,6 +70,7 @@ class PillionListPage extends StatelessWidget {
                             "assets/images/profile.png", // Replace with actual path
                         distance: "800m",
                         timeAway: "5 mins",
+                        phoneNumber: '9876543210',
                       ),
                 );
               },

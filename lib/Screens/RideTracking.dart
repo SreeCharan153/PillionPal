@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pillionpal/widgets/SecondaryButton.dart';
 import 'package:pillionpal/widgets/PaymentCard.dart';
 import 'package:pillionpal/widgets/PrimaryButton.dart';
-import 'package:pillionpal/widgets/maps.dart'; // Import the map
+import 'package:pillionpal/widgets/maps.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallHelper {
