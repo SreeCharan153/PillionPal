@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'pillion_details_page.dart';
 import '../widgets/pillion_card.dart';
 import '../widgets/Ride_request_popup.dart';
+import 'Home.dart';
 
 class PillionListPage extends StatelessWidget {
   const PillionListPage({super.key});
@@ -54,22 +56,8 @@ class PillionListPage extends StatelessWidget {
                 );
               },
               onRequestRide: () {
-                showModalBottomSheet(
-                  context: context,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  builder:
-                      (context) => const RideRequestPopup(
-                        name: "John Doe",
-                        imageUrl:
-                            "assets/images/profile.png", // Replace with actual path
-                        distance: "800m",
-                        timeAway: "5 mins",
-                      ),
-                );
+                Get.offAll(HomeScreen(isBikeMode: false), arguments: {"showPopup": true});
+
               },
             ),
           ],

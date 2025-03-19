@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pillionpal/Screens/RideTracking.dart';
+import 'package:pillionpal/widgets/RideTracking.dart';
 import 'bike_details_page.dart';
 import '../widgets/bike_card.dart';
+import 'Home.dart';
+import 'package:get/route_manager.dart';
 
 class BikeListPage extends StatelessWidget {
   const BikeListPage({super.key});
@@ -58,10 +60,10 @@ class BikeListPage extends StatelessWidget {
                 );
               },
               onRideNow: () {
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const RideTrackingScreen()),
-              );
+                Get.offAll(
+                  HomeScreen(isBikeMode: true),
+                  arguments: {"showPopup": true},
+                );
               },
             ),
           ],

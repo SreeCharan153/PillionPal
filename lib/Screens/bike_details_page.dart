@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:pillionpal/Screens/RideTracking.dart';
+import 'package:pillionpal/widgets/RideTracking.dart';
 import 'package:pillionpal/widgets/PrimaryButton.dart';
+import 'Home.dart';
 
 class BikeDetailsPage extends StatelessWidget {
   final String bikeName;
@@ -48,13 +49,14 @@ class BikeDetailsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Image.asset(imageUrl, height: 400),
-              ),
+              Center(child: Image.asset(imageUrl, height: 400)),
               const SizedBox(height: 20),
 
               // Specifications
-              Text("Specifications", style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                "Specifications",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,7 +70,10 @@ class BikeDetailsPage extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Rider & Bike Details
-              Text("Rider & Bike Details", style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                "Rider & Bike Details",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 10),
               _infoRow("Name", riderName),
               _infoRow("Gender", gender),
@@ -81,7 +86,10 @@ class BikeDetailsPage extends StatelessWidget {
                 child: PrimaryButton(
                   text: "Ride Now",
                   onPressed: () {
-                    Get.to(const RideTrackingScreen());
+                    Get.offAll(
+                      HomeScreen(isBikeMode: true),
+                      arguments: {"showPopup": true},
+                    );
                   },
                 ),
               ),

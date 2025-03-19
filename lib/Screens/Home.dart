@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/NotificationScreen.dart';
+import 'package:pillionpal/widgets/RideTracking.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
@@ -9,6 +10,8 @@ import '../widgets/CustomSearchBar.dart';
 import '../widgets/EnableLocationDialog.dart';
 import '../widgets/maps.dart';
 import '../widgets/location_select.dart';
+import '../widgets/Ride_request_popup.dart';
+
 class HomeScreen extends StatefulWidget {
   final bool isBikeMode;
 
@@ -35,7 +38,18 @@ class _HomeScreenState extends State<HomeScreen>
       CurvedAnimation(parent: _menuController, curve: Curves.easeInOut),
     );
 
-    _checkLocationPermission(); // ✅ Check permission on startup
+    _checkLocationPermission();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = Get.arguments as Map<String, dynamic>?;
+      if (args != null && args['showPopup'] == true) {
+        if (!widget.isBikeMode) {
+          _showRideRequestPopup();
+        } // Call the popup function
+        else {
+          showRideTrackingPopup(context);
+        }
+      }
+    }); // ✅ Check permission on startup
   }
 
   // 🔹 Check & Request Location Permission
@@ -101,6 +115,24 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
+  void _showRideRequestPopup() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return const RideRequestPopup(
+          name: "John Doe",
+          imageUrl: "assets/images/profile.png",
+          distance: "800m",
+          timeAway: "5 mins",
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -109,10 +141,8 @@ class _HomeScreenState extends State<HomeScreen>
       body: Stack(
         children: [
           // ✅ Show the Map in the background
-          const Positioned.fill(
-            child: MapBox(),
-          ),
-          
+          const Positioned.fill(child: MapBox()),
+
           Positioned.fill(
             child: Column(
               children: [
@@ -177,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen>
                       PrimaryButton(
                         text: "Transport",
                         onPressed: () {
-                          showTransportPopup(context,widget.isBikeMode);
+                          showTransportPopup(context, widget.isBikeMode);
                         },
                       ),
                     ],
