@@ -5,14 +5,14 @@ class CustomSearchBar extends StatefulWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
-  final bool isBikeMode; // ✅ Add this missing property
+  final bool isBikeMode;
 
   const CustomSearchBar({
     super.key,
     this.controller,
     this.onChanged,
     this.onSubmitted,
-    required this.isBikeMode, // ✅ Ensure it's required
+    required this.isBikeMode,
   });
 
   @override
@@ -85,7 +85,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       MaterialPageRoute(
         builder: (context) => FavouriteScreen(
           favoritePlaces: favoritePlaces,
-          isBikeMode: widget.isBikeMode, // ✅ Use the actual value
+          isBikeMode: widget.isBikeMode,
         ),
       ),
     );
@@ -114,7 +114,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     hintText: "Where would you go?",
                     border: InputBorder.none,
                   ),
-                  style: TextStyle( fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
               GestureDetector(
@@ -130,11 +130,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             margin: const EdgeInsets.symmetric(horizontal: 10),
             padding: const EdgeInsets.symmetric(vertical: 5),
             decoration: BoxDecoration(
-      
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-               
+                  color: Colors.grey.withOpacity(0.3), // ✅ Fix shadow issue
                   blurRadius: 5,
                   spreadRadius: 1,
                   offset: const Offset(0, 2),
@@ -144,7 +143,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             child: Column(
               children: filteredSuggestions
                   .map((suggestion) => ListTile(
-                        title: Text(suggestion),
+                        title: Text(
+                          suggestion,
+                          style: const TextStyle(color: Colors.black), // ✅ Fix text visibility
+                        ),
                         onTap: () => _onSuggestionSelected(suggestion),
                       ))
                   .toList(),
