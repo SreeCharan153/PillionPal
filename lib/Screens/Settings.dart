@@ -36,10 +36,10 @@ class SettingsScreen extends StatelessWidget {
               onTap: () => ChangePassword(context),
             ),
             const SizedBox(height: 10),
-            SettingsTile(
+            /*SettingsTile(
               title: "Change Language",
               onTap: () => print("Change Language Clicked"),
-            ),
+            ),*/
             const SizedBox(height: 10),
             SettingsTile(
               title: "Privacy Policy",

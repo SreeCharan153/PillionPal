@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/NotificationScreen.dart';
-import 'package:pillionpal/Screens/bike_list_page.dart';
+import 'package:pillionpal/widgets/RideTracking.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/navbar.dart';
 import '../widgets/MenuDrawer.dart';
 import '../widgets/CustomSearchBar.dart';
 import '../widgets/EnableLocationDialog.dart';
+import '../widgets/maps.dart';
+import '../widgets/location_select.dart';
+import '../widgets/Ride_request_popup.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isBikeMode;
@@ -35,13 +38,24 @@ class _HomeScreenState extends State<HomeScreen>
       CurvedAnimation(parent: _menuController, curve: Curves.easeInOut),
     );
 
-    _checkLocationPermission(); // ✅ Check permission on startup
+    _checkLocationPermission();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = Get.arguments as Map<String, dynamic>?;
+      if (args != null && args['showPopup'] == true) {
+        if (widget.isBikeMode) {
+          _showRideRequestPopup();
+        } // Call the popup function
+        else {
+          showRideTrackingPopup(context);
+        }
+      }
+    }); // ✅ Check permission on startup
   }
 
   // 🔹 Check & Request Location Permission
   Future<void> _checkLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
-    
+
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       bool granted = await showDialog(
@@ -65,7 +79,8 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> _getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.high,
+      );
       debugPrint("User Location: ${position.latitude}, ${position.longitude}");
     } catch (e) {
       debugPrint("Error getting location: $e");
@@ -100,6 +115,25 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
+  void _showRideRequestPopup() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return const RideRequestPopup(
+          name: "John Doe",
+          imageUrl: "assets/images/profile.png",
+          distance: "800m",
+          timeAway: "5 mins",
+          phoneNumber: "9876543210",
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -107,6 +141,9 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: Stack(
         children: [
+          // ✅ Show the Map in the background
+          const Positioned.fill(child: MapBox()),
+
           Positioned.fill(
             child: Column(
               children: [
@@ -171,15 +208,13 @@ class _HomeScreenState extends State<HomeScreen>
                       PrimaryButton(
                         text: "Transport",
                         onPressed: () {
-                          if (!widget.isBikeMode) {
-                            Get.to(const BikeListPage());
-                          }
+                          showTransportPopup(context, widget.isBikeMode);
                         },
                       ),
                     ],
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 30),
               ],
             ),
           ),

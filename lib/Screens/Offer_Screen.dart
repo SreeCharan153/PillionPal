@@ -12,7 +12,8 @@ class OfferScreen extends StatefulWidget {
   _OfferScreenState createState() => _OfferScreenState();
 }
 
-class _OfferScreenState extends State<OfferScreen> with SingleTickerProviderStateMixin {
+class _OfferScreenState extends State<OfferScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
 
   @override
@@ -57,7 +58,7 @@ class _OfferScreenState extends State<OfferScreen> with SingleTickerProviderStat
             appBar: AppBar(
               title: const Text("Offers"),
               centerTitle: true,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               elevation: 0,
               leading: IconButton(
                 icon: const Icon(Icons.menu), // ✅ Menu Button
@@ -73,7 +74,11 @@ class _OfferScreenState extends State<OfferScreen> with SingleTickerProviderStat
                   offerType: offers[index]["event"]!,
                   onCollect: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("${offers[index]["discount"]} collected!")),
+                      SnackBar(
+                        content: Text(
+                          "${offers[index]["discount"]} collected!",
+                        ),
+                      ),
                     );
                   },
                 );
@@ -86,7 +91,10 @@ class _OfferScreenState extends State<OfferScreen> with SingleTickerProviderStat
           ),
 
           // ✅ Sliding MenuDrawer
-          MenuDrawer(animationController: _menuController, isBikeMode: widget.isBikeMode),
+          MenuDrawer(
+            animationController: _menuController,
+            isBikeMode: widget.isBikeMode,
+          ),
         ],
       ),
     );

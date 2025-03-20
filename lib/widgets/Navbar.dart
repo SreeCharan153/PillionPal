@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pillionpal/Screens/ProfileScreen.dart';
 import '../Screens/Home.dart';
 import '../Screens/FavouriteScreen.dart';
 //import 'wallet_screen.dart';
@@ -21,35 +22,37 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   void _onItemTapped(int index) {
-  if (index == widget.selectedIndex) return; // Prevent unnecessary navigation
+    if (index == widget.selectedIndex) return; // Prevent unnecessary navigation
 
-  Widget nextScreen;
-  switch (index) {
-    case 0:
-      nextScreen = HomeScreen(isBikeMode: widget.isBikeMode);
-      break;
-    case 1:
-      nextScreen = FavouriteScreen(isBikeMode: widget.isBikeMode, favoritePlaces: [],);
-      break;
-    case 2:
-      // Wallet Screen (currently not implemented)
-      return;
-    case 3:
-      nextScreen = OfferScreen(isBikeMode: widget.isBikeMode);
-      break;
-    case 4:
-      // Profile Screen (currently not implemented)
-      return;
-    default:
-      return;
+    Widget nextScreen;
+    switch (index) {
+      case 0:
+        nextScreen = HomeScreen(isBikeMode: widget.isBikeMode);
+        break;
+      case 1:
+        nextScreen = FavouriteScreen(
+          isBikeMode: widget.isBikeMode,
+          favoritePlaces: [],
+        );
+        break;
+      case 2:
+        // Wallet Screen (currently not implemented)
+        return;
+      case 3:
+        nextScreen = OfferScreen(isBikeMode: widget.isBikeMode);
+        break;
+      case 4:
+        nextScreen = ProfileScreen(isBikeMode: widget.isBikeMode);
+        break;
+      default:
+        return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => nextScreen),
+    );
   }
-
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (context) => nextScreen),
-  );
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +61,7 @@ class _NavbarState extends State<Navbar> {
       onTap: _onItemTapped,
       selectedItemColor: const Color.fromRGBO(0, 137, 85, 1),
       unselectedItemColor: Colors.grey,
+      type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(icon: const Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(

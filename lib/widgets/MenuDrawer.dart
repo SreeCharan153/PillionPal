@@ -6,7 +6,7 @@ import '../screens/ComplainScreen.dart';
 import '../screens/AboutUs.dart';
 import '../screens/Settings.dart';
 //import '../screens/HelpScreen.dart';
-//import '../screens/LoginScreen.dart';
+import '../Screens/login_screen.dart';
 
 class MenuDrawer extends StatelessWidget {
   final AnimationController animationController;
@@ -88,7 +88,7 @@ class MenuDrawer extends StatelessWidget {
                   const Divider(),
                   //_menuItem(context, Icons.help_outline, "Help & Support", const HelpScreen()),
                   //const Divider(), // Adds a separator before logout
-                  //_menuItem(context, Icons.logout, "Logout", const LoginScreen(), isLogout: true),
+                  _menuItem(context, Icons.logout, "Logout", const LoginPage(), isLogout: true),
                 ],
               ),
             ),

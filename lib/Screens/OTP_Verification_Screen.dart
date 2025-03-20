@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
 import 'package:pinput/pinput.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pillionpal/Screens/SetPasswordScreen.dart';
 import '../widgets/PrimaryButton.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
-  const OTPVerificationScreen({super.key, required String name, required String email, required String phone});
+  final String name;
+  final String email;
+  final String phone;
+  final String verificationId; // ✅ Added for OTP verification
+
+  const OTPVerificationScreen({
+    super.key,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.verificationId, // ✅ Ensure it's required
+  });
 
   @override
   _OTPVerificationScreenState createState() => _OTPVerificationScreenState();
@@ -14,27 +26,34 @@ class OTPVerificationScreen extends StatefulWidget {
 
 class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   final TextEditingController _otpController = TextEditingController();
-  final String _correctOTP = "123456"; // Replace with backend OTP validation
-  bool _isVerifying = false; // State for loading indicator
+  bool _isVerifying = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void _verifyOTP() {
-    FocusScope.of(context).unfocus(); // Close keyboard
-    setState(() => _isVerifying = true); // Show loading
+  void _verifyOTP() async {
+    FocusScope.of(context).unfocus();
+    setState(() => _isVerifying = true);
 
-    String enteredOTP = _otpController.text.trim(); // Remove spaces
+    String enteredOTP = _otpController.text.trim();
 
+    if (enteredOTP.length != 6) {
+      _showSnackBar("OTP must be 6 digits!", Colors.orange);
+      setState(() => _isVerifying = false);
+      return;
+    }
 
-    Future.delayed(const Duration(milliseconds: 800), () {
-      if (enteredOTP.length != 6) {
-        _showSnackBar("OTP must be 6 digits!", Colors.orange);
-      } else if (enteredOTP == _correctOTP) {
-       Get.to(SetPasswordScreen());
-      } else {
-        _showSnackBar("Invalid OTP! Please try again.", Colors.red);
-      }
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: widget.verificationId,
+        smsCode: enteredOTP,
+      );
 
-      setState(() => _isVerifying = false); // Hide loading
-    });
+      await _auth.signInWithCredential(credential);
+      Get.to(() => SetPasswordScreen());
+    } catch (e) {
+      _showSnackBar("Invalid OTP! Please try again.", Colors.red);
+    }
+
+    setState(() => _isVerifying = false);
   }
 
   void _showSnackBar(String message, Color color) {
@@ -64,7 +83,6 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: size.height * 0.1),
-
                 Text(
                   "Phone Verification",
                   style: TextStyle(
@@ -73,75 +91,24 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.01),
-                const Text(
-                  "Enter your OTP code",
-                  style: TextStyle(color: Colors.grey),
-                ),
+                const Text("Enter your OTP code", style: TextStyle(color: Colors.grey)),
                 SizedBox(height: size.height * 0.03),
 
-                // OTP Input Field
                 Pinput(
                   controller: _otpController,
                   length: 6,
                   keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(6),
-                  ],
-                  defaultPinTheme: PinTheme(
-                    width: 50,
-                    height: 50,
-                    textStyle: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  focusedPinTheme: PinTheme(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color.fromRGBO(0, 137, 85, 1)),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(6)],
                   onCompleted: (pin) {
                     Future.delayed(const Duration(milliseconds: 300), () {
-                      _verifyOTP(); // Auto-verify when 6 digits are entered
+                      _verifyOTP();
                     });
                   },
                 ),
 
                 SizedBox(height: size.height * 0.03),
 
-                // Resend Code Option
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Didn’t receive code?"),
-                    TextButton(
-                      onPressed: () => _showSnackBar(
-                        "OTP has been resent!",
-                        const Color.fromRGBO(0, 137, 85, 1),
-                      ),
-                      child: const Text(
-                        "Resend again",
-                        style: TextStyle(
-                          color: Color.fromRGBO(0, 137, 85, 1),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: size.height * 0.04),
-
-                // Verify Button with Loading Indicator
-                _isVerifying
-                    ? const CircularProgressIndicator()
-                    : PrimaryButton(text: "Verify", onPressed: _verifyOTP),
+                _isVerifying ? const CircularProgressIndicator() : PrimaryButton(text: "Verify", onPressed: _verifyOTP),
 
                 SizedBox(height: size.height * 0.05),
               ],
