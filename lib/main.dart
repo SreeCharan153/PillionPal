@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       home: isLoggedIn ? const RoleSelectionPage() : const OnboardingScreen(),
     );
   }
-}
+} 
 
 // Function to check if the user is logged in
 Future<bool> checkLoginStatus() async {
