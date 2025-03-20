@@ -86,7 +86,7 @@ class BikeDetailsPage extends StatelessWidget {
                   text: "Ride Now",
                   onPressed: () {
                     Get.offAll(
-                      HomeScreen(isBikeMode: true),
+                      HomeScreen(isBikeMode: false),
                       arguments: {"showPopup": true},
                     );
                   },

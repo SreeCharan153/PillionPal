@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = Get.arguments as Map<String, dynamic>?;
       if (args != null && args['showPopup'] == true) {
-        if (!widget.isBikeMode) {
+        if (widget.isBikeMode) {
           _showRideRequestPopup();
         } // Call the popup function
         else {

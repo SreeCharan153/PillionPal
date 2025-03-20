@@ -7,13 +7,12 @@ import 'package:get/route_manager.dart';
 
 class BikeListPage extends StatelessWidget {
   const BikeListPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -21,7 +20,6 @@ class BikeListPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
           ),
         ),
         centerTitle: true,
@@ -61,7 +59,7 @@ class BikeListPage extends StatelessWidget {
               },
               onRideNow: () {
                 Get.offAll(
-                  HomeScreen(isBikeMode: true),
+                  HomeScreen(isBikeMode: false),
                   arguments: {"showPopup": true},
                 );
               },
