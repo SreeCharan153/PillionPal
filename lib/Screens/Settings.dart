@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/Private_Policies.dart';
+import 'package:pillionpal/Screens/contactus.dart';
 import '../Widgets/SettingsTile.dart';
 import "ChangePassword.dart";
 import 'DeleteAccount.dart'; // Ensure you have the reusable widget
@@ -39,8 +40,8 @@ class SettingsScreen extends StatelessWidget {
             /*SettingsTile(
               title: "Change Language",
               onTap: () => print("Change Language Clicked"),
-            ),*/
-            const SizedBox(height: 10),
+            ),
+            const SizedBox(height: 10),*/
             SettingsTile(
               title: "Privacy Policy",
               onTap: () => Get.to(() => const PrivacyPolicyScreen()),
@@ -48,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 10),
             SettingsTile(
               title: "Contact Us",
-              onTap: () => print("Contact Us Clicked"),
+              onTap: () => Get.to(ContactUsScreen()),
             ),
             const SizedBox(height: 10),
             SettingsTile(

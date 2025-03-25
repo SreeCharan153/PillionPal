@@ -18,7 +18,7 @@ class PaymentMethodCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFFEAF7EC), // Light greenish tint
+          color: const Color.fromRGBO(234, 247, 236, 1), // Light greenish tint
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: const Color.fromRGBO(0, 137, 85, 1), width: 1),
         ),
