@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/navbar.dart';
+import '../widgets/Navbar.dart';
 import '../widgets/MenuDrawer.dart';
 
 class ProfileScreen extends StatefulWidget {

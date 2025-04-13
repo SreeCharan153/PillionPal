@@ -4,7 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/NotificationScreen.dart';
 import 'package:pillionpal/widgets/RideTracking.dart';
 import '../widgets/PrimaryButton.dart';
-import '../widgets/navbar.dart';
+import '../widgets/Navbar.dart';
 import '../widgets/MenuDrawer.dart';
 import '../widgets/CustomSearchBar.dart';
 import '../widgets/EnableLocationDialog.dart';

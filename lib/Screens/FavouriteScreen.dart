@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/AddressCard.dart';
-import '../widgets/navbar.dart';
+import '../widgets/Navbar.dart';
 import '../widgets/MenuDrawer.dart';
 
 class FavouriteScreen extends StatefulWidget {

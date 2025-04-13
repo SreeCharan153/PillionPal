@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../screens/Home.dart';
-import '../screens/HistoryPage.dart';
-import '../screens/ComplainScreen.dart';
+import '../Screens/Home.dart';
+import '../Screens/HistoryPage.dart';
+import '../Screens/complainScreen.dart';
 //import '../screens/ReferralScreen.dart';
-import '../screens/AboutUs.dart';
-import '../screens/Settings.dart';
+import '../Screens/AboutUs.dart';
+import '../Screens/Settings.dart';
 //import '../screens/HelpScreen.dart';
 import '../Screens/login_screen.dart';
 

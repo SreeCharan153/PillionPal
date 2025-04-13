@@ -79,12 +79,12 @@ flutter:
     - assets/images/welcome_2.png
     - assets/images/welcome_3.png
     - assets/images/welcome_4.png
-    - assets/images/flags/hindi.png
-    - assets/images/flags/english.png
-    - assets/images/flags/german.png
-    - assets/images/flags/french.png
-    - assets/images/others/apple.png
-    - assets/images/others/gmail.png
+    - assets/images/flags/Hindi.png
+    - assets/images/flags/English.png
+    - assets/images/flags/German.png
+    - assets/images/flags/French.png
+    - assets/images/others/Apple.png
+    - assets/images/others/Gmail.png
     - assets/images/selection.png
     - assets/images/Biles/bike_1.png
     - assets/images/Biles/bike_2.png

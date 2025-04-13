@@ -1,4 +1,6 @@
 {
     "emulator.emulatorPath": "C:\\Users\\cherry\\AppData\\Local\\Android\\Sdk\\emulator",
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "IDX.aI.enableInlineCompletion": true,
+    "IDX.aI.enableCodebaseIndexing": true
 }

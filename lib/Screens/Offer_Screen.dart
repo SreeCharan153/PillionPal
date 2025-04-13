@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/CouponCard.dart';
-import '../widgets/navbar.dart';
+import '../widgets/Navbar.dart';
 import '../widgets/MenuDrawer.dart'; // ✅ Import MenuDrawer
 
 class OfferScreen extends StatefulWidget {

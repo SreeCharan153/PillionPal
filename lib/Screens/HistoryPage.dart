@@ -98,7 +98,17 @@ class HistoryList extends StatelessWidget {
             ),
             trailing: Icon(Icons.arrow_forward_ios, color: textColor, size: 18),
             onTap: () {
-              // TODO: Implement ride details navigation
+              Navigator.pushNamed(
+                context,
+                '/RideDetailsPage',
+                arguments: {
+                  'bikeName': '$listType Ride $index', // Example data
+                  'gender': 'Male', // Example data
+                  'bikeNo': 'Bike No. $index', // Example data
+                  'licenceNo': 'Licence No. $index', // Example data
+                },
+              );
+
             },
           ),
         );

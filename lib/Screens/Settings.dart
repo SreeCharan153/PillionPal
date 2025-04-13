@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/Private_Policies.dart';
 import 'package:pillionpal/Screens/contactus.dart';
-import '../Widgets/SettingsTile.dart';
+import '../widgets/SettingsTile.dart';
 import "ChangePassword.dart";
 import 'DeleteAccount.dart'; // Ensure you have the reusable widget
 

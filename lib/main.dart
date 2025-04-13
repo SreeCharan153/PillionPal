@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pillionpal/Screens/RideDetailsPage.dart';
 import 'package:pillionpal/Screens/onbording1.dart';
 import 'package:pillionpal/Screens/RoleSelectionPage.dart';
 import 'firebase_options.dart';
@@ -48,6 +49,9 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: isLoggedIn ? const RoleSelectionPage() : const OnboardingScreen(),
+      getPages: [
+        GetPage(name: '/rideDetails', page: () => RideDetailsPage(bikeName: '', bikeNumber: '', licenseNumber: '', gender: '',)),
+      ],
     );
   }
 } 
