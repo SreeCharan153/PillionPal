@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pillionpal/Screens/ProfileScreen.dart';
+import 'package:pillionpal/Screens/login_screen.dart';
 import 'package:pillionpal/Screens/RideDetailsPage.dart';
 import 'package:pillionpal/Screens/onbording1.dart';
 import 'package:pillionpal/Screens/RoleSelectionPage.dart';
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         inputDecorationTheme: const InputDecorationTheme(
           filled: true,
-          fillColor: Colors.white, // Light mode fill color
+          fillColor: Colors.white,
         ),
       ),
       darkTheme: ThemeData(
@@ -44,17 +46,32 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.black,
         inputDecorationTheme: const InputDecorationTheme(
           filled: true,
-          fillColor: Colors.black, // Dark mode fill color
+          fillColor: Colors.black,
         ),
       ),
       themeMode: ThemeMode.system,
-      home: isLoggedIn ? const RoleSelectionPage() : const OnboardingScreen(),
+      initialRoute: isLoggedIn ? '/roleSelection' : '/onboarding',
       getPages: [
-        GetPage(name: '/rideDetails', page: () => RideDetailsPage(bikeName: '', bikeNumber: '', licenseNumber: '', gender: '',)),
-      ],
+  GetPage(name: '/onboarding', page: () => const OnboardingScreen()),
+  GetPage(name: '/login', page: () => const LoginPage()),
+  GetPage(name: '/roleSelection', page: () => const RoleSelectionPage()),
+  GetPage(
+    name: '/rideDetails',
+    page: () => RideDetailsPage(
+      bikeName: '',
+      bikeNumber: '',
+      licenseNumber: '',
+      gender: '',
+    ),
+  ),
+  GetPage(
+    name: '/profile',
+    page: () => ProfileScreen(isBikeMode: true),
+  ),
+],
     );
   }
-} 
+}
 
 // Function to check if the user is logged in
 Future<bool> checkLoginStatus() async {

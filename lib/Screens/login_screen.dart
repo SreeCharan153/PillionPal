@@ -10,6 +10,7 @@ import 'package:pillionpal/Screens/SignUpScreen.dart';
 import '../widgets/InputFields.dart';
 import '../widgets/PrimaryButton.dart';
 import '../widgets/CustomButtons.dart';
+import '../api_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,32 +22,44 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isPasswordVisible = false; // 🔥 Password visibility state
+  bool isPasswordVisible = false; // 🔹 Password visibility toggle
+  bool isLoading = false; // 🔹 Loading indicator
 
-  // 🔹 Firebase Authentication Instance
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase Auth
+  final ApiService apiService = ApiService(); // API Service for FastAPI
 
-  // 🔹 Function to Handle Email & Password Login
+  // 🔹 Show SnackBar
+  void _showSnackbar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: color),
+    );
+  }
+
+  // 🔹 Sign In with FastAPI backend
   Future<void> _signIn() async {
-    String email = emailController.text.trim();
+    String username = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
+    if (username.isEmpty || password.isEmpty) {
       _showSnackbar("All fields are required", Colors.red);
       return;
     }
 
+    setState(() => isLoading = true);
+
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      bool success = await apiService.login(username, password);
+      setState(() => isLoading = false);
 
-      // 🔹 Save login state
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-
-      // 🔹 Navigate to Role Selection Page
-      Get.to(RoleSelectionPage());
+      if (success) {
+        _showSnackbar("Login successful", Colors.green);
+        Get.offAll(() => const RoleSelectionPage()); // Navigate to RoleSelectionPage
+      } else {
+        _showSnackbar("Invalid username or password", Colors.red);
+      }
     } catch (e) {
-      _showSnackbar("Invalid email or password", Colors.red);
+      setState(() => isLoading = false);
+      _showSnackbar("Login failed: ${e.toString()}", Colors.red);
     }
   }
 
@@ -65,15 +78,10 @@ class _LoginPageState extends State<LoginPage> {
 
       await _auth.signInWithCredential(credential);
 
-      // 🔹 Save login state
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
 
-      // 🔹 Navigate to Role Selection Page
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const RoleSelectionPage()),
-      );
+      Get.offAll(() => const RoleSelectionPage());
     } catch (e) {
       _showSnackbar("Google Sign-In failed", Colors.red);
     }
@@ -90,17 +98,10 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await _auth.sendPasswordResetEmail(email: email);
-      _showSnackbar("Password Reset Link Sent to your Email", Colors.green);
+      _showSnackbar("Password reset link sent to your email", Colors.green);
     } catch (e) {
       _showSnackbar("Failed to send reset email", Colors.red);
     }
-  }
-
-  // 🔹 Show SnackBar
-  void _showSnackbar(String message, Color color) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 
   @override
@@ -114,8 +115,6 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 50),
-
-              // Title
               const Text(
                 "Welcome Back!",
                 style: TextStyle(
@@ -126,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 30),
 
-              // Email Input using InputFields.dart ✅
+              // Email Input
               InputFields.buildTextField(
                 hint: "Enter your email",
                 controller: emailController,
@@ -135,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 16),
 
-              // Password Input using InputFields.dart ✅
+              // Password Input
               InputFields.buildTextField(
                 hint: "Enter your password",
                 controller: passwordController,
@@ -169,7 +168,9 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
 
               // Sign In Button
-              PrimaryButton(text: "Sign In", onPressed: _signIn),
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : PrimaryButton(text: "Sign In", onPressed: _signIn),
               const SizedBox(height: 20),
 
               // OR Divider
@@ -185,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
 
-              // Google Sign-in Button
+              // Google Sign-In Button
               CustomButtons.buildOutlinedButton(
                 text: "Sign in with Google",
                 icon: FontAwesomeIcons.google,
@@ -193,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 10),
 
-              // Apple Sign-in Button (TODO)
+              // Apple Sign-In Button (Placeholder)
               CustomButtons.buildOutlinedButton(
                 text: "Sign in with Apple",
                 icon: Icons.apple,
@@ -209,9 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const Text("Don't have an account?"),
                   TextButton(
-                    onPressed: () {
-                      Get.to(SignupPage());
-                    },
+                    onPressed: () => Get.to(() => const SignupPage()),
                     child: const Text(
                       "Sign Up",
                       style: TextStyle(color: Color.fromRGBO(0, 137, 85, 1)),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/Navbar.dart';
 import '../widgets/MenuDrawer.dart';
+import '../api_service.dart';
+import 'login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isBikeMode;
@@ -37,6 +41,37 @@ class _ProfileScreenState extends State<ProfileScreen>
     }
   }
 
+  Future<void> _confirmLogout() async {
+    bool? confirm = await Get.dialog<bool>(
+      AlertDialog(
+        title: const Text('Confirm Logout'),
+        content: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Get.back(result: true),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      // Call your API logout
+      await ApiService.logout();
+
+      // Clear login status
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('isLoggedIn');
+
+      // Navigate safely using widget instead of route string
+      Get.offAll(() => const LoginPage());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -64,10 +99,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                       children: [
                         CircleAvatar(
                           radius: 50,
-
                           backgroundColor: theme.scaffoldBackgroundColor,
-
-                          child: Icon(Icons.person),
+                          child: const Icon(Icons.person, size: 50),
                         ),
                         Positioned(
                           bottom: 2,
@@ -80,11 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             ),
                             child: const Padding(
                               padding: EdgeInsets.all(4.0),
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: 18,
-                              ),
+                              child: Icon(Icons.camera_alt, color: Colors.white, size: 18),
                             ),
                           ),
                         ),
@@ -97,25 +126,18 @@ class _ProfileScreenState extends State<ProfileScreen>
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 20),
-
-                  _infoCard("Email", "nate@email.com"),
-                  _infoCard("Phone", "+91 9876543210"),
-                  _infoCard("Gender", "Male"),
-                  _infoCard("Address", "123, Street Name, City, India"),
-
+                  _infoCard("Email", "nate@email.com", leadingIcon: Icons.email),
+                  _infoCard("Phone", "+91 9876543210", leadingIcon: Icons.phone),
+                  _infoCard("Gender", "Male", leadingIcon: Icons.person),
+                  _infoCard("Address", "123, Street Name, City, India", leadingIcon: Icons.location_on),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _confirmLogout,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: theme.scaffoldBackgroundColor,
                       side: const BorderSide(color: Colors.white, width: 2),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 40,
-                        vertical: 12,
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                     ),
                     child: const Text("Logout", style: TextStyle(fontSize: 16)),
                   ),
@@ -147,8 +169,10 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         child: Row(
           children: [
-            if (leadingIcon != null)
-              Padding(padding: const EdgeInsets.only(right: 8)),
+            if (leadingIcon != null) ...[
+              Icon(leadingIcon, size: 20),
+              const SizedBox(width: 8),
+            ],
             Text(value, style: const TextStyle(fontSize: 16)),
           ],
         ),

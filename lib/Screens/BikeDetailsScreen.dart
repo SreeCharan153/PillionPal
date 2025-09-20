@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pillionpal/Screens/Home.dart';
-import 'dart:io';
-
 import '../widgets/InputFields.dart'; // Import InputFields utility
 import '../widgets/PrimaryButton.dart'; // Import PrimaryButton widget
 
@@ -16,18 +13,8 @@ class BikeDetailsScreen extends StatefulWidget {
 class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
   final TextEditingController bikeNameController = TextEditingController();
   final TextEditingController modelController = TextEditingController();
+  final TextEditingController mileageController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  File? _bikeImage;
-
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _bikeImage = File(pickedFile.path);
-      });
-    }
-  }
 
   void _submitDetails() {
     if (_formKey.currentState!.validate()) {
@@ -89,51 +76,24 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Upload Bike Image Section
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(8),
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        child: Text(
-                          _bikeImage == null ? "Upload Bike Image" : "Image Selected",
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-
-                    // Upload Button using PrimaryButton (wrapped in Expanded)
-                    SizedBox(
-                      width: 100, // Give a fixed width to avoid layout issues
-                      child: PrimaryButton(
-                        text: "Upload",
-                        onPressed: _pickImage,
-                      ),
-                    ),
-                  ],
+                // Mileage Input Field
+                InputFields.buildTextField(
+                  context: context,
+                  hint: "Mileage (km/l)",
+                  keyboardType: TextInputType.number,
+                  controller: mileageController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter mileage";
+                    }
+                    final mileage = double.tryParse(value);
+                    if (mileage == null || mileage <= 0) {
+                      return "Please enter a valid positive number";
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
-
-                // Image Preview (Fixed Layout Issue)
-                if (_bikeImage != null)
-                  Center(
-                    child: SizedBox(
-                      width: 150,
-                      height: 150,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(_bikeImage!, fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                const SizedBox(height: 16),
-
                 // Submit Button using PrimaryButton
                 Center(
                   child: PrimaryButton(
