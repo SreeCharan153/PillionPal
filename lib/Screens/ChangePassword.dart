@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../widgets/InputFields.dart'; // Update path as needed
-import '../widgets/PrimaryButton.dart'; // Update path as needed
+import '../widgets/InputFields.dart';
+import '../widgets/PrimaryButton.dart';
+import '../api_service.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -13,54 +14,69 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
+  late ApiService apiService;
   bool isOldPasswordVisible = false;
   bool isNewPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
+  bool isLoading = false;
 
-  void validatePasswords() {
-    String oldPass = oldPasswordController.text;
-    String newPass = newPasswordController.text;
-    String confirmPass = confirmPasswordController.text;
+  @override
+  void initState() {
+    super.initState();
+    _initApiService();
+  }
 
-    if (oldPass.isEmpty || newPass.isEmpty || confirmPass.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("All fields are required"),
-          backgroundColor: Color.fromRGBO(0, 137, 85, 1),
-        ),
-      );
-      return;
-    }
+  Future<void> _initApiService() async {
+    apiService = await ApiService.getInstance();
+  }
 
-    if (oldPass == newPass) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Old and New Passwords must not be the same"),
-          backgroundColor: Color.fromRGBO(0, 137, 85, 1),
-        ),
-      );
-      return;
-    }
-
-    if (newPass != confirmPass) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("New and Confirm Password must match"),
-          backgroundColor: Color.fromRGBO(0, 137, 85, 1),
-        ),
-      );
-      return;
-    }
-
+  void _showMessage(String msg, bool success) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Password Changed Successfully"),
-        backgroundColor: Color.fromRGBO(0, 137, 85, 1),
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: success ? const Color.fromRGBO(0, 137, 85, 1) : Colors.red,
       ),
     );
+  }
+
+  Future<void> validatePasswords() async {
+    String oldPass = oldPasswordController.text.trim();
+    String newPass = newPasswordController.text.trim();
+    String confirmPass = confirmPasswordController.text.trim();
+
+    // Basic validation
+    if (oldPass.isEmpty || newPass.isEmpty || confirmPass.isEmpty) {
+      _showMessage("All fields are required", false);
+      return;
+    }
+    if (newPass != confirmPass) {
+      _showMessage("New password and Confirm password do not match", false);
+      return;
+    }
+    if (newPass.length < 6) {
+      _showMessage("Password must be at least 6 characters", false);
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    final result = await apiService.changePassword(oldPass, newPass, confirmPass);
+
+    setState(() => isLoading = false);
+
+    bool success = result["state"] ?? false;
+    String message = result["message"] ?? "Something went wrong";
+
+    _showMessage(message, success);
+
+    if (success) {
+      oldPasswordController.clear();
+      newPasswordController.clear();
+      confirmPasswordController.clear();
+      Get.back(); // Navigate back after success
+    }
   }
 
   @override
@@ -75,11 +91,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
         title: const Text(
           "Change Password",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
       ),
@@ -94,16 +106,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               isPassword: !isOldPasswordVisible,
               suffixIcon: IconButton(
                 icon: Icon(
-                  isOldPasswordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+                  isOldPasswordVisible ? Icons.visibility : Icons.visibility_off,
                   color: Colors.grey,
                 ),
-                onPressed: () {
-                  setState(() {
-                    isOldPasswordVisible = !isOldPasswordVisible;
-                  });
-                },
+                onPressed: () => setState(() => isOldPasswordVisible = !isOldPasswordVisible),
               ),
             ),
             const SizedBox(height: 15),
@@ -114,16 +120,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               isPassword: !isNewPasswordVisible,
               suffixIcon: IconButton(
                 icon: Icon(
-                  isNewPasswordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+                  isNewPasswordVisible ? Icons.visibility : Icons.visibility_off,
                   color: Colors.grey,
                 ),
-                onPressed: () {
-                  setState(() {
-                    isNewPasswordVisible = !isNewPasswordVisible;
-                  });
-                },
+                onPressed: () => setState(() => isNewPasswordVisible = !isNewPasswordVisible),
               ),
             ),
             const SizedBox(height: 15),
@@ -134,23 +134,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               isPassword: !isConfirmPasswordVisible,
               suffixIcon: IconButton(
                 icon: Icon(
-                  isConfirmPasswordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+                  isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
                   color: Colors.grey,
                 ),
-                onPressed: () {
-                  setState(() {
-                    isConfirmPasswordVisible = !isConfirmPasswordVisible;
-                  });
-                },
+                onPressed: () => setState(() => isConfirmPasswordVisible = !isConfirmPasswordVisible),
               ),
             ),
             const SizedBox(height: 30),
-            PrimaryButton(
-              text: "Change Password",
-              onPressed: validatePasswords,
-            ),
+            isLoading
+                ? const CircularProgressIndicator()
+                : PrimaryButton(
+                    text: "Change Password",
+                    onPressed: validatePasswords,
+                  ),
           ],
         ),
       ),

@@ -4,7 +4,6 @@ import '../widgets/Navbar.dart';
 import '../widgets/MenuDrawer.dart';
 import '../api_service.dart';
 import 'login_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isBikeMode;
@@ -17,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _menuController;
+  late ApiService apiService;
 
   @override
   void initState() {
@@ -25,6 +25,12 @@ class _ProfileScreenState extends State<ProfileScreen>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+
+    _initializeApiService();
+  }
+
+  Future<void> _initializeApiService() async {
+    apiService = await ApiService.getInstance();
   }
 
   @override
@@ -60,14 +66,10 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
 
     if (confirm == true) {
-      // Call your API logout
-      await ApiService.logout();
+      // Call singleton logout
+      await apiService.logout();
 
-      // Clear login status
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove('isLoggedIn');
-
-      // Navigate safely using widget instead of route string
+      // Navigate safely
       Get.offAll(() => const LoginPage());
     }
   }
