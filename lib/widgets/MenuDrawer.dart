@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+//import 'package:get/get.dart';
 import '../Screens/Home.dart';
 import '../Screens/HistoryPage.dart';
 import '../Screens/complainScreen.dart';
-//import '../screens/ReferralScreen.dart';
+// import '../Screens/ReferralScreen.dart';
 import '../Screens/AboutUs.dart';
 import '../Screens/Settings.dart';
-//import '../screens/HelpScreen.dart';
 import '../Screens/login_screen.dart';
+import '../api_service.dart';
 
 class MenuDrawer extends StatelessWidget {
   final AnimationController animationController;
   final bool isBikeMode;
 
-  const MenuDrawer({super.key, required this.animationController, required this.isBikeMode});
+  const MenuDrawer({
+    super.key,
+    required this.animationController,
+    required this.isBikeMode,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +43,6 @@ class MenuDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 40),
-
                   // Close Menu Button
                   GestureDetector(
                     onTap: () => animationController.reverse(),
@@ -50,29 +54,23 @@ class MenuDrawer extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 30),
-
-                  // Profile Section (Dynamic Placeholder for Future Integration)
+                  // Profile Section
                   Center(
                     child: Column(
                       children: [
                         CircleAvatar(
                           radius: 40,
-                          backgroundColor: isDarkMode
-                              ? Colors.grey.shade800
-                              : Colors.grey.shade300,
+                          backgroundColor: isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300,
                           backgroundImage: const AssetImage('assets/images/profile.png'),
                         ),
                         const SizedBox(height: 10),
-                        Text("User Name", style: theme.textTheme.titleLarge), // Replace with dynamic name
-                        Text("user@email.com", style: theme.textTheme.bodyMedium), // Replace with dynamic email
+                        Text("User Name", style: theme.textTheme.titleLarge),
+                        Text("user@email.com", style: theme.textTheme.bodyMedium),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 30),
-
                   // Menu Items
                   _menuItem(context, Icons.home, "Home", HomeScreen(isBikeMode: isBikeMode)),
                   const Divider(),
@@ -87,7 +85,7 @@ class MenuDrawer extends StatelessWidget {
                   _menuItem(context, Icons.settings_outlined, "Settings", const SettingsScreen()),
                   const Divider(),
                   //_menuItem(context, Icons.help_outline, "Help & Support", const HelpScreen()),
-                  //const Divider(), // Adds a separator before logout
+                  //const Divider(),
                   _menuItem(context, Icons.logout, "Logout", const LoginPage(), isLogout: true),
                 ],
               ),
@@ -98,15 +96,25 @@ class MenuDrawer extends StatelessWidget {
     );
   }
 
-  Widget _menuItem(BuildContext context, IconData icon, String title, Widget screen, {bool isLogout = false}) {
+  Widget _menuItem(
+    BuildContext context,
+    IconData icon,
+    String title,
+    Widget screen, {
+    bool isLogout = false,
+  }) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (isLogout) {
-          // Handle logout logic (Add authentication clearing if needed)
+          // Async logout via singleton
+          final apiService = await ApiService.getInstance();
+          await apiService.logout();
+
+          // Navigate safely and clear previous routes
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => screen),
-            (route) => false, // Clears all previous routes
+            (route) => false,
           );
         } else {
           Navigator.push(
@@ -115,10 +123,7 @@ class MenuDrawer extends StatelessWidget {
               pageBuilder: (_, __, ___) => screen,
               transitionsBuilder: (_, anim, __, child) {
                 return SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(-1, 0),
-                    end: Offset.zero,
-                  ).animate(anim),
+                  position: Tween<Offset>(begin: const Offset(-1, 0), end: Offset.zero).animate(anim),
                   child: child,
                 );
               },

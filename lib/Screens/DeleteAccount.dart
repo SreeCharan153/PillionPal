@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../api_service.dart';
+import 'login_screen.dart';
 
-class DeleteAccountScreen extends StatelessWidget {
+class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
 
-  void _confirmDelete(BuildContext context) {
+  @override
+  _DeleteAccountScreenState createState() => _DeleteAccountScreenState();
+}
+
+class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  late ApiService apiService;
+  bool isDeleting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initApiService();
+  }
+
+  Future<void> _initApiService() async {
+    apiService = await ApiService.getInstance();
+  }
+
+  void _confirmDelete() {
     showDialog(
       context: context,
       builder: (context) {
@@ -20,9 +40,9 @@ class DeleteAccountScreen extends StatelessWidget {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () {
+              onPressed: () async {
                 Get.back(); // Close dialog
-                _deleteAccount(); // Call delete function
+                await _deleteAccount(); // Call delete function
               },
               child: const Text("Delete"),
             ),
@@ -32,14 +52,23 @@ class DeleteAccountScreen extends StatelessWidget {
     );
   }
 
-  void _deleteAccount() {
-    // Handle account deletion logic here (Firebase, API call, etc.)
+  Future<void> _deleteAccount() async {
+    setState(() => isDeleting = true);
+    final message = await apiService.deleteAccount(); // Returns String
+    setState(() => isDeleting = false);
+
     Get.snackbar(
-      "Deleted",
-      "Your account has been deleted.",
+      "Account Status",
+      message,
       backgroundColor: Colors.red,
       colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
     );
+
+    if (message.contains("successfully")) {
+      // Navigate back to login page
+      Get.offAll(() => const LoginPage());
+    }
   }
 
   @override
@@ -77,17 +106,19 @@ class DeleteAccountScreen extends StatelessWidget {
             const Spacer(),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                onPressed: () => _confirmDelete(context),
-                child: const Text(
-                  "Delete",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
+              child: isDeleting
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: _confirmDelete,
+                      child: const Text(
+                        "Delete",
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
             ),
             const SizedBox(height: 20),
           ],

@@ -22,20 +22,30 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isPasswordVisible = false; // 🔹 Password visibility toggle
-  bool isLoading = false; // 🔹 Loading indicator
+  bool isPasswordVisible = false;
+  bool isLoading = false;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase Auth
-  final ApiService apiService = ApiService(); // API Service for FastAPI
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // 🔹 Show SnackBar
-  void _showSnackbar(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: color),
-    );
+  late ApiService apiService;
+
+  @override
+  void initState() {
+    super.initState();
+    _initApiService();
   }
 
-  // 🔹 Sign In with FastAPI backend
+  void _initApiService() async {
+    apiService = await ApiService.getInstance();
+  }
+
+  // Show snackbar
+  void _showSnackbar(String message, Color color) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
+  }
+
+  // FastAPI login
   Future<void> _signIn() async {
     String username = emailController.text.trim();
     String password = passwordController.text.trim();
@@ -53,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (success) {
         _showSnackbar("Login successful", Colors.green);
-        Get.offAll(() => const RoleSelectionPage()); // Navigate to RoleSelectionPage
+        Get.offAll(() => const RoleSelectionPage());
       } else {
         _showSnackbar("Invalid username or password", Colors.red);
       }
@@ -63,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // 🔹 Google Sign-In
+  // Google Sign-In
   Future<void> _signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -87,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // 🔹 Forgot Password
+  // Forgot Password
   Future<void> _sendPasswordReset() async {
     String email = emailController.text.trim();
 
