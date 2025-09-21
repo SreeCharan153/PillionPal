@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
+  static const String baseUrl = "http://10.0.2.2:8000";
   static ApiService? _instance;
   String? token;
 
@@ -25,7 +26,6 @@ class ApiService {
     token = prefs.getString('jwtToken');
   }
 
-}
 //Signup users
 Future<bool> signup(String name, String email, String phone, String password,String gender) async {
   final url = Uri.parse('$baseUrl/auth/signup');
@@ -46,13 +46,9 @@ Future<bool> signup(String name, String email, String phone, String password,Str
   if (response.statusCode == 200) {
     return true;
   } else {
-    print("Signup failed: ${response.body}");
     return false;
   }
 }
-=======
-
-  static const String baseUrl = "http://10.0.2.2:8000";
 
   /// LOGIN
   Future<bool> login(String username, String password) async {

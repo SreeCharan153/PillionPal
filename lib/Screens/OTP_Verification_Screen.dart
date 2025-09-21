@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
 import 'package:pillionpal/Screens/complete_your_profile.dart';
 import 'package:pinput/pinput.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:pillionpal/Screens/SetPasswordScreen.dart';
 import '../widgets/PrimaryButton.dart';
 
