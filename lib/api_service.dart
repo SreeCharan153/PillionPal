@@ -25,6 +25,33 @@ class ApiService {
     token = prefs.getString('jwtToken');
   }
 
+}
+//Signup users
+Future<bool> signup(String name, String email, String phone, String password,String gender) async {
+  final url = Uri.parse('$baseUrl/auth/signup');
+  final response = await http.post(
+    url,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: {
+      "name": name,
+      "email": email,
+      "phone": phone,
+      "password": password,
+      "gender": gender,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    print("Signup failed: ${response.body}");
+    return false;
+  }
+}
+=======
+
   static const String baseUrl = "http://10.0.2.2:8000";
 
   /// LOGIN
@@ -41,6 +68,7 @@ class ApiService {
       token = data['access_token'];
 
       if (token == null || token!.isEmpty) return false;
+
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwtToken', token!);

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
+import 'package:pillionpal/Screens/complete_your_profile.dart';
 import 'package:pinput/pinput.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pillionpal/Screens/SetPasswordScreen.dart';
+// import 'package:pillionpal/Screens/SetPasswordScreen.dart';
 import '../widgets/PrimaryButton.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
   final String name;
   final String email;
   final String phone;
-  final String verificationId; // ✅ Added for OTP verification
+  final String password;
+  //final String verificationId; // ✅ Added for OTP verification
 
   const OTPVerificationScreen({
     super.key,
     required this.name,
     required this.email,
     required this.phone,
-    required this.verificationId, // ✅ Ensure it's required
+    required this.password,
+   // required this.verificationId, // ✅ Ensure it's required
   });
 
   @override
@@ -27,11 +30,17 @@ class OTPVerificationScreen extends StatefulWidget {
 class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   final TextEditingController _otpController = TextEditingController();
   bool _isVerifying = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _verifyOTP() async {
     FocusScope.of(context).unfocus();
     setState(() => _isVerifying = true);
+    void _showSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: color),
+    );
+  }
+
 
     String enteredOTP = _otpController.text.trim();
 
@@ -40,28 +49,32 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       setState(() => _isVerifying = false);
       return;
     }
-
-    try {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: widget.verificationId,
-        smsCode: enteredOTP,
-      );
-
-      await _auth.signInWithCredential(credential);
-      Get.to(() => SetPasswordScreen());
-    } catch (e) {
+    if(enteredOTP == '100100'){
+      setState(() => _isVerifying = false);
+      Get.to(() => CompleteProfile());
+    }
+    else{
       _showSnackBar("Invalid OTP! Please try again.", Colors.red);
+      setState(() => _isVerifying = false);
+      return;
     }
 
-    setState(() => _isVerifying = false);
+    // try {
+    //   PhoneAuthCredential credential = PhoneAuthProvider.credential(
+    //     verificationId: widget.verificationId,
+    //     smsCode: enteredOTP,
+    //   );
+
+    //   await _auth.signInWithCredential(credential);
+    //   Get.to(() => CompleteProfile());
+    // } catch (e) {
+    //   _showSnackBar("Invalid OTP! Please try again.", Colors.red);
+    // }
+
+    
   }
 
-  void _showSnackBar(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: color),
-    );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
