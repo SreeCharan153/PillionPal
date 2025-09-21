@@ -39,7 +39,30 @@ Future<bool> login(String username, String password) async {
     return false;
   }
 }
+//Signup users
+Future<bool> signup(String name, String email, String phone, String password,String gender) async {
+  final url = Uri.parse('$baseUrl/auth/signup');
+  final response = await http.post(
+    url,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: {
+      "name": name,
+      "email": email,
+      "phone": phone,
+      "password": password,
+      "gender": gender,
+    },
+  );
 
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    print("Signup failed: ${response.body}");
+    return false;
+  }
+}
 
   /// Fetch ride details
   Future<Map<String, dynamic>> getRideDetails(int rideId) async {
