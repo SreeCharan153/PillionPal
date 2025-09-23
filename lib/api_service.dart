@@ -26,29 +26,39 @@ class ApiService {
     token = prefs.getString('jwtToken');
   }
 
-//Signup users
-Future<bool> signup(String name, String email, String phone, String password,String gender) async {
-  final url = Uri.parse('$baseUrl/auth/signup');
-  final response = await http.post(
-    url,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: {
-      "name": name,
-      "email": email,
-      "phone": phone,
-      "password": password,
-      "gender": gender,
-    },
-  );
+  //Signup users
+  Future<bool> signup(
+    String username,
+    String name,
+    String email,
+    String phone,
+    String password,
+    String role,
+    String gender,
+  ) async {
+    final url = Uri.parse('$baseUrl/auth/signup');
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "username": username,
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "password": password,
+        "role": role,
+        "gender": gender,
+      }),
+    );
 
-  if (response.statusCode == 200) {
-    return true;
-  } else {
-    return false;
+    // print('Signup response status: \\${response.statusCode}');
+    // print('Signup response body: \\${response.body}');
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 
   /// LOGIN
   Future<bool> login(String username, String password) async {
@@ -64,7 +74,6 @@ Future<bool> signup(String name, String email, String phone, String password,Str
       token = data['access_token'];
 
       if (token == null || token!.isEmpty) return false;
-
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwtToken', token!);
@@ -89,7 +98,8 @@ Future<bool> signup(String name, String email, String phone, String password,Str
 
       if (response.statusCode == 200) return jsonDecode(response.body);
 
-      final error = jsonDecode(response.body)['detail'] ?? "Failed to fetch ride";
+      final error =
+          jsonDecode(response.body)['detail'] ?? "Failed to fetch ride";
       return {"error": error};
     } catch (e) {
       return {"error": e.toString()};
@@ -152,14 +162,18 @@ Future<bool> signup(String name, String email, String phone, String password,Str
       final data = jsonDecode(response.body);
       return {
         "state": data["state"] ?? (response.statusCode == 200),
-        "message": data["message"] ??
+        "message":
+            data["message"] ??
             data["error"] ??
             (response.statusCode == 200
                 ? "Password changed successfully"
                 : "Failed to change password"),
       };
     } on TimeoutException {
-      return {"state": false, "message": "Request timed out. Please try again."};
+      return {
+        "state": false,
+        "message": "Request timed out. Please try again.",
+      };
     } catch (e) {
       return {"state": false, "message": "An error occurred: $e"};
     }
@@ -173,7 +187,7 @@ Future<bool> signup(String name, String email, String phone, String password,Str
     token = null;
   }
 
-/// DELETE ACCOUNT
+  /// DELETE ACCOUNT
   Future<String> deleteAccount() async {
     if (token == null) await _init();
     if (token == null) return "User not logged in";

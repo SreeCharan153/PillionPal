@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:pillionpal/Screens/OTP_Verification_Screen.dart';
+import '../api_service.dart';
+import 'package:http/http.dart' as http;
 import 'package:pillionpal/Screens/login_screen.dart';
 import '../widgets/InputFields.dart';
 import '../widgets/PrimaryButton.dart';
@@ -19,6 +21,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -28,12 +31,24 @@ class _SignupPageState extends State<SignupPage> {
   String? selectedGender;
   bool agreeToTerms = false;
   bool isLoading = false;
-  // Removed unused obscureText
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   void _showSnackbar(String message, Color color) {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
+  }
+
+  Future<bool> _isUsernameUnique(String username) async {
+    final url = Uri.parse(
+      'http://10.0.2.2:8000/auth/check-username?username=$username',
+    );
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final exists = response.body.contains('true');
+      return !exists;
+    }
+    return false;
   }
 
   void _signUp() async {
@@ -43,17 +58,31 @@ class _SignupPageState extends State<SignupPage> {
           RegExp(r'[0-9]').hasMatch(password); // At least 1 digit
     }
 
+    String username = usernameController.text.trim();
     String name = nameController.text.trim();
     String email = emailController.text.trim();
     String phone = phoneController.text.trim();
     String password = passwordController.text;
+    String role = "pillion";
+    String? gender = selectedGender;
 
     // Validate fields
-    if (name.isEmpty ||
+    if (username.isEmpty ||
+        name.isEmpty ||
         email.isEmpty ||
         phone.isEmpty ||
-        selectedGender == null) {
+        gender == null) {
       _showSnackbar("All fields are required", Colors.red);
+      return;
+    }
+    // Check username uniqueness
+    setState(() => isLoading = true);
+    if (!await _isUsernameUnique(username)) {
+      setState(() => isLoading = false);
+      _showSnackbar(
+        "Username already exists. Please choose another.",
+        Colors.red,
+      );
       return;
     }
     if (phone.length != 10) {
@@ -75,22 +104,38 @@ class _SignupPageState extends State<SignupPage> {
       _showSnackbar("Passwords do not match!", Colors.red);
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Signing Up..."),
-        backgroundColor: Colors.green,
-      ),
-    );
-    Get.to(
-      () => OTPVerificationScreen(
-        name: name,
-        email: email,
-        phone: phone,
-        password: password,
-      ),
-    );
-    setState(() => isLoading = true);
-    // Phone verification logic can be added here if needed
+
+    try {
+      final api = await ApiService.getInstance();
+      // You must update your ApiService.signup to accept username and role
+      bool result = await api.signup(
+        username,
+        name,
+        email,
+        phone,
+        password,
+        role,
+        gender,
+        
+      );
+      if (result) {
+        _showSnackbar("Sign up successful!", Colors.green);
+        Get.to(
+          () => OTPVerificationScreen(
+            name: name,
+            email: email,
+            phone: phone,
+            password: password,
+          ),
+        );
+      } else {
+        _showSnackbar("Sign up failed. Please try again.", Colors.red);
+      }
+    } catch (e) {
+      _showSnackbar("Error: ${e.toString()}", Colors.red);
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
   Future<void> _signInWithGoogle() async {
@@ -151,6 +196,13 @@ class _SignupPageState extends State<SignupPage> {
               ),
               const SizedBox(height: 30),
 
+              // Username
+              InputFields.buildTextField(
+                hint: "Username",
+                controller: usernameController,
+                context: context,
+              ),
+              const SizedBox(height: 16),
               // Full Name
               InputFields.buildTextField(
                 hint: "Full Name",
