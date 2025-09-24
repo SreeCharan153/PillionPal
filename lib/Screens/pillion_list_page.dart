@@ -4,7 +4,12 @@ import '../widgets/pillion_card.dart';
 import '../widgets/Ride_request_popup.dart';
 
 class PillionListPage extends StatelessWidget {
-  const PillionListPage({super.key});
+  final Map<String, dynamic> rideData;
+
+  const PillionListPage({
+    super.key,
+    required this.rideData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class PillionListPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          "Available Pillions to pair",
+          "Available Pillion to Pair",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -26,56 +31,49 @@ class PillionListPage extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            PillionCard(
-              name: 'John Doe',
-              profileImageUrl: 'assets/images/profile.png',
-              pickupPoint: 'Maddilapalem',
-              dropPoint: 'Dakamarri',
-              priceShare: '50',
-              phonenumber: '9876543210',
-              onViewDetails: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => PillionDetailsPage(
-                          name: 'John Doe',
-                          age: 25,
-                          pickupPoint: 'Maddilapalem',
-                          dropPoint: 'Dakamarri',
-                          priceShare: '50',
-                          totalDistance: '40 KM',
-                          imageUrl: "assets/images/profile.png",
-                          gender: "Male",
-                          phonenumber: '9876543210',
-                        ),
-                  ),
-                );
-              },
-              onRequestRide: () {
-                showModalBottomSheet(
-                  context: context,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  builder:
-                      (context) => const RideRequestPopup(
-                        name: "John Doe",
-                        imageUrl:
-                            "assets/images/profile.png", // Replace with actual path
-                        distance: "800m",
-                        timeAway: "5 mins",
-                        phoneNumber: "9876543210",
-                      ),
-                );
-              },
-            ),
-          ],
+      body: Center(
+        child: PillionCard(
+          name: rideData['name'] ?? 'Unknown',
+          profileImageUrl: rideData['imageUrl'] ?? 'assets/images/profile.png',
+          pickupPoint: rideData['pickupPoint'] ?? 'N/A',
+          dropPoint: rideData['dropPoint'] ?? 'N/A',
+          priceShare: rideData['priceShare']?.toString() ?? '0',
+          phonenumber: rideData['phoneNumber'] ?? 'N/A',
+          onViewDetails: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PillionDetailsPage(
+                  name: rideData['name'] ?? 'Unknown',
+                  age: rideData['age'] ?? 0,
+                  pickupPoint: rideData['pickupPoint'] ?? 'N/A',
+                  dropPoint: rideData['dropPoint'] ?? 'N/A',
+                  priceShare: rideData['priceShare']?.toString() ?? '0',
+                  totalDistance: rideData['totalDistance'] ?? 'N/A',
+                  imageUrl: rideData['imageUrl'] ?? 'assets/images/profile.png',
+                  gender: rideData['gender'] ?? 'Unknown',
+                  phonenumber: rideData['phoneNumber'] ?? 'N/A',
+                ),
+              ),
+            );
+          },
+          onRequestRide: () {
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              builder: (context) => RideRequestPopup(
+                name: rideData['name'] ?? 'Unknown',
+                imageUrl: rideData['imageUrl'] ?? 'assets/images/profile.png',
+                distance: rideData['distance'] ?? 'N/A',
+                timeAway: rideData['timeAway'] ?? 'N/A',
+                phoneNumber: rideData['phoneNumber'] ?? 'N/A',
+              ),
+            );
+          },
         ),
       ),
     );

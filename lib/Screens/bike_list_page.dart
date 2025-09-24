@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-//import 'package:pillionpal/widgets/RideTracking.dart';
 import 'bike_details_page.dart';
 import '../widgets/bike_card.dart';
 import 'Home.dart';
 import 'package:get/route_manager.dart';
 
 class BikeListPage extends StatelessWidget {
-  const BikeListPage({super.key});
+  final List<Map<String, dynamic>> rideList;
+
+  const BikeListPage({
+    super.key,
+    required this.rideList,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,34 +31,37 @@ class BikeListPage extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            BikeCard(
-              bikeName: "TVS Apache RTR 160",
-              imageUrl: "assets/images/Biles/bike_1.png",
-              transmission: "Manual",
-              seats: "1",
-              fair: "₹100",
-              distance: "800m",
-              timeAway: "5 mins",
+      body: ListView.builder(
+        itemCount: rideList.length,
+        itemBuilder: (context, index) {
+          final rideData = rideList[index];
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            child: BikeCard(
+              bikeName: rideData['bikeName'] ?? "Unknown Bike",
+              imageUrl: rideData['imageUrl'] ?? "assets/images/Biles/bike_1.png",
+              transmission: rideData['transmission'] ?? "Manual",
+              seats: rideData['seats']?.toString() ?? "1",
+              fair: "₹${rideData['fare']?.toString() ?? "0"}",
+              distance: "N/A",
+              timeAway: "N/A",
               onViewDetails: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder:
-                        (context) => BikeDetailsPage(
-                          bikeName: "TVS Apache RTR 160",
-                          imageUrl: "assets/images/Biles/bike_1.png",
-                          maxPower: "2500hp",
-                          fair: "₹100",
-                          maxSpeed: "230kph",
-                          acceleration: "2.5 sec",
-                          riderName: "Sergio Ramasis",
-                          gender: "Male",
-                          bikeNo: "AP 13 AH XXXX",
-                          licenceNo: "DL14 20110012345",
-                        ),
+                    builder: (context) => BikeDetailsPage(
+                      bikeName: rideData['bikeName'] ?? "Unknown Bike",
+                      imageUrl: rideData['imageUrl'] ?? "assets/images/Biles/bike_1.png",
+                      maxPower: rideData['maxPower']?.toString() ?? "N/A",
+                      fair: "₹${rideData['fare']?.toString() ?? "0"}",
+                      maxSpeed: rideData['maxSpeed']?.toString() ?? "N/A",
+                      acceleration: rideData['acceleration']?.toString() ?? "N/A",
+                      riderName: rideData['rider_id'] ?? "Unknown",
+                      gender: rideData['gender'] ?? "Unknown",
+                      bikeNo: rideData['bikeNo'] ?? "N/A",
+                      licenceNo: rideData['licenceNo'] ?? "N/A",
+                    ),
                   ),
                 );
               },
@@ -64,8 +72,8 @@ class BikeListPage extends StatelessWidget {
                 );
               },
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

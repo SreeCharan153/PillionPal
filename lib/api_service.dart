@@ -53,8 +53,8 @@ Future<bool> signup(
       }),
     );
 
-    print('Signup response status: ${response.statusCode}');
-    print('Signup response body: ${response.body}');
+    //print('Signup response status: ${response.statusCode}');
+    //print('Signup response body: ${response.body}');
 
     final data = jsonDecode(response.body);
 
@@ -112,26 +112,35 @@ Future<bool> signup(
   }
 
   /// GET RIDE DETAILS
-  Future<Map<String, dynamic>> getRideDetails(int rideId) async {
-    if (token == null) await _init();
-    if (token == null) return {"error": "User not logged in"};
+  Future<Map<String, dynamic>> getRideDetails(
+  String startLocation,
+  String endLocation,
+) async {
+  if (token == null) await _init();
+  if (token == null) return {"error": "User not logged in"};
 
-    try {
-      final url = Uri.parse('$baseUrl/rides/$rideId');
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
+  try {
+    final url = Uri.parse(
+      '$baseUrl/pillion/ride_requests?start_location=$startLocation&end_location=$endLocation',
+    );
 
-      if (response.statusCode == 200) return jsonDecode(response.body);
+    final response = await http.get(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
 
-      final error =
-          jsonDecode(response.body)['detail'] ?? "Failed to fetch ride";
-      return {"error": error};
-    } catch (e) {
-      return {"error": e.toString()};
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
     }
+
+    final error =
+        jsonDecode(response.body)['detail'] ?? "Failed to fetch ride";
+    return {"error": error};
+  } catch (e) {
+    return {"error": e.toString()};
   }
+}
+
 
   /// REGISTER RIDER
   Future<Map<String, dynamic>> registerRider({
@@ -270,5 +279,6 @@ Future<bool> signup(
     }
   }
   
+
 
 }
