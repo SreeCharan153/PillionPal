@@ -4,10 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pillionpal/Screens/RoleSelectionPage.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:pillionpal/Screens/OTP_Verification_Screen.dart';
+//import 'package:pillionpal/Screens/OTP_Verification_Screen.dart';
 import '../api_service.dart';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 import 'package:pillionpal/Screens/login_screen.dart';
 import '../widgets/InputFields.dart';
 import '../widgets/PrimaryButton.dart';
@@ -39,20 +40,9 @@ class _SignupPageState extends State<SignupPage> {
     ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 
-  Future<bool> _isUsernameUnique(String username) async {
-    final url = Uri.parse(
-      'http://10.0.2.2:8000/auth/check-username?username=$username',
-    );
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final exists = response.body.contains('true');
-      return !exists;
-    }
-    return false;
-  }
 
   void _signUp() async {
-    bool _isPasswordValid(String password) {
+    bool isPasswordValid(String password) {
       return password.length >= 6 &&
           RegExp(r'[A-Z]').hasMatch(password) && // At least 1 uppercase letter
           RegExp(r'[0-9]').hasMatch(password); // At least 1 digit
@@ -77,14 +67,6 @@ class _SignupPageState extends State<SignupPage> {
     }
     // Check username uniqueness
     setState(() => isLoading = true);
-    if (!await _isUsernameUnique(username)) {
-      setState(() => isLoading = false);
-      _showSnackbar(
-        "Username already exists. Please choose another.",
-        Colors.red,
-      );
-      return;
-    }
     if (phone.length != 10) {
       _showSnackbar("Phone number must be 10 digits", Colors.red);
       return;
@@ -93,7 +75,7 @@ class _SignupPageState extends State<SignupPage> {
       _showSnackbar("You must agree to the Terms & Conditions", Colors.red);
       return;
     }
-    if (!_isPasswordValid(passwordController.text)) {
+    if (!isPasswordValid(passwordController.text)) {
       _showSnackbar(
         "Password must be 6+ characters, contain 1 uppercase & 1 digit.",
         Colors.red,
@@ -120,13 +102,8 @@ class _SignupPageState extends State<SignupPage> {
       );
       if (result) {
         _showSnackbar("Sign up successful!", Colors.green);
-        Get.to(
-          () => OTPVerificationScreen(
-            name: name,
-            email: email,
-            phone: phone,
-            password: password,
-          ),
+        Get.offAll(
+          () => RoleSelectionPage()
         );
       } else {
         _showSnackbar("Sign up failed. Please try again.", Colors.red);
@@ -237,7 +214,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 items:
-                    ["Male", "Female", "Other"].map((gender) {
+                    ["male", "female", "other"].map((gender) {
                       return DropdownMenuItem(
                         value: gender,
                         child: Text(gender),

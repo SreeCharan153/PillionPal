@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:get/state_manager.dart';
 import 'package:pillionpal/Screens/Home.dart';
 import '../widgets/InputFields.dart'; // Import InputFields utility
 import '../widgets/PrimaryButton.dart'; // Import PrimaryButton widget
@@ -11,9 +12,9 @@ class BikeDetailsScreen extends StatefulWidget {
 }
 
 class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
-  final TextEditingController bikeNameController = TextEditingController();
   final TextEditingController modelController = TextEditingController();
   final TextEditingController mileageController = TextEditingController();
+  final TextEditingController bikenumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _submitDetails() {
@@ -58,15 +59,6 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // Bike Name Input Field
-                InputFields.buildTextField(
-                  context: context,
-                  hint: "Bike Name",
-                  controller: bikeNameController,
-                  validator: (value) => value!.isEmpty ? "Please enter bike name" : null,
-                ),
-                const SizedBox(height: 16),
-
                 // Model Input Field
                 InputFields.buildTextField(
                   context: context,
@@ -75,6 +67,15 @@ class _BikeDetailsScreenState extends State<BikeDetailsScreen> {
                   validator: (value) => value!.isEmpty ? "Please enter model name" : null,
                 ),
                 const SizedBox(height: 16),
+
+                //Bike Number Plate Input 
+                InputFields.buildTextField(
+                  context: context,
+                  hint: "Your Bike Number Plate",
+                  controller: bikenumberController,
+                  validator: (value) => value!.isEmpty ? "Please enter bike number" : null,
+                ),
+                const SizedBox(height: 16,),
 
                 // Mileage Input Field
                 InputFields.buildTextField(

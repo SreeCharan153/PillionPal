@@ -34,7 +34,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   void _verifyOTP() async {
     FocusScope.of(context).unfocus();
     setState(() => _isVerifying = true);
-    void _showSnackBar(String message, Color color) {
+    void showSnackBar(String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: color),
     );
@@ -44,7 +44,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     String enteredOTP = _otpController.text.trim();
 
     if (enteredOTP.length != 6) {
-      _showSnackBar("OTP must be 6 digits!", Colors.orange);
+      showSnackBar("OTP must be 6 digits!", Colors.orange);
       setState(() => _isVerifying = false);
       return;
     }
@@ -53,7 +53,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       Get.to(() => CompleteProfile());
     }
     else{
-      _showSnackBar("Invalid OTP! Please try again.", Colors.red);
+      showSnackBar("Invalid OTP! Please try again.", Colors.red);
       setState(() => _isVerifying = false);
       return;
     }

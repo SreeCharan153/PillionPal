@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,17 +27,18 @@ class ApiService {
     token = prefs.getString('jwtToken');
   }
 
-  //Signup users
-  Future<bool> signup(
-    String username,
-    String name,
-    String email,
-    String phone,
-    String password,
-    String role,
-    String gender,
-  ) async {
-    final url = Uri.parse('$baseUrl/auth/signup');
+Future<bool> signup(
+  String username,
+  String name,
+  String email,
+  String phone,
+  String password,
+  String role,
+  String gender,
+) async {
+  final url = Uri.parse('$baseUrl/auth/signup');
+
+  try {
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
@@ -51,14 +53,37 @@ class ApiService {
       }),
     );
 
-    // print('Signup response status: \\${response.statusCode}');
-    // print('Signup response body: \\${response.body}');
+    print('Signup response status: ${response.statusCode}');
+    print('Signup response body: ${response.body}');
+
+    final data = jsonDecode(response.body);
+
     if (response.statusCode == 200) {
+      // If backend returns token, store it
+      if (data['token'] != null) {
+        token = data['token'];
+        role = data['role'];
+        username = data['sub'];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('jwtToken', token!);
+        await prefs.setString('role', role);
+        await prefs.setString('username', username);
+        await prefs.setBool('isLoggedIn', true);
+      }
       return true;
+    } else if (data['error'] != null) {
+      // Show actual backend error
+      //print('Signup failed: ${data['error']}');
+      return false;
     } else {
       return false;
     }
+  } catch (e) {
+    //print('Signup exception: $e');
+    return false;
   }
+}
+
 
   /// LOGIN
   Future<bool> login(String username, String password) async {
@@ -72,13 +97,15 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       token = data['access_token'];
-
+      final role = data['role'];
+      
       if (token == null || token!.isEmpty) return false;
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwtToken', token!);
+      await prefs.setString('role', role);
+      await prefs.setString('username', username);
       await prefs.setBool('isLoggedIn', true);
-
       return true;
     }
     return false;
@@ -108,9 +135,36 @@ class ApiService {
 
   /// REGISTER RIDER
   Future<Map<String, dynamic>> registerRider({
-    required String bikeName,
+    required String aadhar_number,
+    required String license_number,
+  }) async {
+    if (token == null) await _init();
+    if (token == null) return {"error": "User not logged in"};
+
+    final url = Uri.parse('$baseUrl/rider/register');
+    final response = await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(
+      {
+        "aadhar_number": aadhar_number,
+        "license_number": license_number
+      }
+      ),
+    );
+
+    if (response.statusCode == 200) return jsonDecode(response.body);
+    return {"error": response.body};
+  }
+
+  /// REGISTER BIKE
+  Future<Map<String, dynamic>> registerBike({
+    required String bike_no,
     required String model,
-    required String mileage,
+    required Float mileage,
   }) async {
     if (token == null) await _init();
     if (token == null) return {"error": "User not logged in"};
@@ -123,9 +177,11 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
-        "bike_name": bikeName,
+      {
         "model": model,
-        "mileage": mileage,
+        "license_plate": bike_no,
+        "mileage": mileage
+      }
       }),
     );
 
@@ -213,4 +269,6 @@ class ApiService {
       return "Error: $e";
     }
   }
+  
+
 }
